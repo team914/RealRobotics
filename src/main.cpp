@@ -2,6 +2,39 @@
 #include "okapi/api.hpp"
 
 using namespace okapi;
+
+
+//controller stuff
+Controller masterController;
+
+ControllerDigital rampUp=ControllerDigital::L1;
+ControllerDigital rampDown=ControllerDigital::L2;
+
+ControllerDigital TakeIn=ControllerDigital::R1;
+ControllerDigital TakeOut=ControllerDigital::R2;
+//motor stuff
+MotorGroup LeftDrive={14,15};
+MotorGroup RightDrive={-16,-17};
+auto drive = ChassisControllerFactory::create(
+ LeftDrive,RightDrive,
+ AbstractMotor::gearset::green
+);
+
+MotorGroup ramp={11,-12};
+
+MotorGroup take={19,-20};
+
+
+//other variables
+int rampSpeed=100;
+int takeSpeed=200;
+bool constantIntake=false;
+bool checking=false;
+
+//functions for my sanity
+bool Dinput(ControllerDigital ibutton){
+ return masterController.getDigital(ibutton);
+}
 /**
  * A callback function for LLEMU's center button.
  *
@@ -18,6 +51,8 @@ void on_center_button() {
 	}
 }
 
+
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -27,8 +62,13 @@ void on_center_button() {
 void initialize() {
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
-
 	pros::lcd::register_btn1_cb(on_center_button);
+	//odometer initialization
+	LeftDrive.tarePosition();
+  LeftDrive.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+
+	RightDrive.tarePosition();
+	RightDrive.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
 }
 
 /**
@@ -60,7 +100,13 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+  QLength base=inch;
+  QAngle Degree=degree;
+drive.moveDistance(base*5);
+drive.turnAngle(Degree*90);
+drive.moveDistance(base*5);
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -76,41 +122,52 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 
+//vars at the top
 void opcontrol() {
-	Controller masterController;
-/*  MotorGroup left_mtr({-1, -2});
-	MotorGroup right_mtr({9, 10});*/
-	auto drive = ChassisControllerFactory::create(
-		{-1,-2},{9,10},
-		AbstractMotor::gearset::green
-	);
+//initialization stuff
+ ramp.setGearing(AbstractMotor::gearset::red);
+ take.setGearing(AbstractMotor::gearset::green);
 
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
 
-	  double forward=(int)masterController.getAnalog(ControllerAnalog::leftY);
-		double turn=(int)masterController.getAnalog(ControllerAnalog::rightX);
-
+		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
+   	pros::lcd::print(0,"Drive 0.5.0");
+		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
-
-
-		//pros::lcd::print(0,"Forward Speed: %d", forward);
-		//pros::lcd::print(1,"Turn Speed: %d", turn);
-
-		/*if(forward==0){
-				left_mtr.moveVelocity((int)turn);
-				right_mtr.moveVelocity((int)(-turn));
-				pros::lcd::print(2,"Bot is turning");
+	  //moving the ramp
+		if(Dinput(rampUp)){
+			ramp.moveVelocity(rampSpeed);
+		}
+		else if(Dinput(rampDown)){
+			ramp.moveVelocity(-rampSpeed);
 		}
 		else{
-			left_mtr.moveVelocity((int)forward);
-			right_mtr.moveVelocity((int)forward);
-			pros::lcd::print(2,"Bot is moving forward");
-		}*/
+			ramp.moveVelocity(0);
+		}
+		pros::delay(20);
+		//intake/outtake
+		if(Dinput(TakeIn)||Dinput(TakeOut)){
+			pros::delay(100);
+			if(Dinput(TakeIn)&&Dinput(TakeOut)&&!checking){
+					constantIntake=!constantIntake;
+          checking=true;
+			}
+		else{
+      checking=false;
+    }
+	}
+  if((Dinput(TakeIn)||constantIntake)&&!Dinput(TakeOut)){
+      take.moveVelocity(takeSpeed);
+  }
+  else if(Dinput(TakeOut)&&!Dinput(TakeIn)&&!constantIntake){
+      take.moveVelocity(-takeSpeed);
+  }
+  else{
+      take.moveVelocity(0);
+  }
 
 		pros::delay(20);
 	}
+
 }

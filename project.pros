@@ -274,7 +274,7 @@
         },
         "upload_options": {
             "compress_bin": true,
-            "description": "Created with PROS",
+            "description": "Drive 0.5.0: changes the ports",
             "remote_name": "robot",
             "slot": 2
         }
