@@ -6,7 +6,6 @@ using namespace okapi;
 
 //controller stuff
 Controller masterController;
-
 ControllerDigital rampUp=ControllerDigital::L1;
 ControllerDigital rampDown=ControllerDigital::L2;
 
@@ -19,10 +18,16 @@ auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green
 );
-
 MotorGroup ramp={11,-12};
 
 MotorGroup take={1,-3};
+
+//auton stuff
+auto auton = AsyncControllerFactory::motionProfile(
+  10,
+  2,
+  1,
+  drive);
 
 
 //other variables
@@ -35,6 +40,9 @@ bool checking=false;
 bool Dinput(ControllerDigital ibutton){
  return masterController.getDigital(ibutton);
 }
+
+
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -49,6 +57,7 @@ void on_center_button() {
 	} else {
 		pros::lcd::clear_line(2);
 	}
+
 }
 
 
@@ -69,8 +78,15 @@ void initialize() {
 
 	RightDrive.tarePosition();
 	RightDrive.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+
+  take.tarePosition();
+  take.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+
+  ramp.tarePosition();
+  ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   //paths
-  drive.generatePath(1_in,1_in,90_deg,"red_a_1");
+  auton.generatePath({{12_in,12_in,90_deg}},"red_a_1");
+  auton.generatePath({{0_in,24_in,90_deg}},"red_a_2");
 }
 
 /**
@@ -103,9 +119,12 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-  QLength base=inch;
-  QAngle Degree=degree;
 
+    take.moveRelative(0.5,1);
+    auton.setTarget("red_a_1");
+    take.moveRelative(0.5,1);
+    auton.setTarget("red_a_2",true);
+    take.moveRelative(0.5,1);
 }
 
 /**
