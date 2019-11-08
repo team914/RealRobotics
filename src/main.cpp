@@ -13,8 +13,8 @@ ControllerDigital rampDown=ControllerDigital::L2;
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
 //motor stuff
-MotorGroup LeftDrive={14,15};
-MotorGroup RightDrive={-16,-17};
+MotorGroup LeftDrive={4,-15};
+MotorGroup RightDrive={19,-20};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green
@@ -22,7 +22,7 @@ auto drive = ChassisControllerFactory::create(
 
 MotorGroup ramp={11,-12};
 
-MotorGroup take={19,-20};
+MotorGroup take={1,-3};
 
 
 //other variables
@@ -131,7 +131,7 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.5.0");
+   	pros::lcd::print(0,"Drive 0.5.2");
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
