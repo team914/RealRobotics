@@ -69,6 +69,8 @@ void initialize() {
 
 	RightDrive.tarePosition();
 	RightDrive.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+  //paths
+  drive.generatePath(1_in,1_in,90_deg,"red_a_1");
 }
 
 /**
@@ -103,9 +105,7 @@ void competition_initialize() {}
 void autonomous() {
   QLength base=inch;
   QAngle Degree=degree;
-drive.moveDistance(base*5);
-drive.turnAngle(Degree*90);
-drive.moveDistance(base*5);
+
 }
 
 /**
