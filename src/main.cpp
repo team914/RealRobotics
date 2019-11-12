@@ -119,7 +119,7 @@ void competition_initialize() {}
 void autonomous() {
   auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
   auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
-  auton.setTarget("red_a_1");
+  auton.setTarget("red_a_1",false);
   auton.setTarget("red_a_2",true);
 }
 
