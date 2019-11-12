@@ -12,8 +12,8 @@ ControllerDigital rampDown=ControllerDigital::L2;
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
 //motor stuff
-MotorGroup LeftDrive={3,-11};
-MotorGroup RightDrive={9,-10};
+MotorGroup LeftDrive={-3,11};
+MotorGroup RightDrive={-9,10};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green
