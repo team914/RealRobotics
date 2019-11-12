@@ -143,7 +143,14 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.7.0");
+   	pros::lcd::print(0,"Drive 0.7.0 Dev");
+    //testing autonomous(Remove when copying to master)
+    if(Dinput(ControllerDigital::B)){
+      pros::delay(1000);
+      if(Dinput(ControllerDigital::B)){
+        autonomous();
+      }
+    }
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
