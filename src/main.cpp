@@ -85,6 +85,7 @@ void initialize() {
 
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   //auton stuff
+
 }
 
 /**
@@ -117,7 +118,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-     	pros::lcd::print(0,"autonomous running");
+ 	pros::lcd::print(0,"autonomous running");
   auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
   auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
   auton.setTarget("red_a_1",true);
@@ -150,7 +151,7 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.7.3 Dev");
+   	pros::lcd::print(0,"Drive 0.7.4 Dev");
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
