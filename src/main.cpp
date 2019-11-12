@@ -118,8 +118,9 @@ void competition_initialize() {}
  */
 void autonomous() {
   auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
+  auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
   auton.setTarget("red_a_1");
-  auton.setTarget("red_a_1",true);
+  auton.setTarget("red_a_2",true);
 }
 
 /**
@@ -145,15 +146,7 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.7.0 Dev");
-    //testing autonomous(Remove when copying to master)
-    if(Dinput(ControllerDigital::B)){
-      pros::delay(1000);
-      if(Dinput(ControllerDigital::B)){
-        autonomous();
-        pros::lcd::print(1,"Autonomous");
-      }
-    }
+   	pros::lcd::print(0,"Drive 0.7.2 Dev");
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
