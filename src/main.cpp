@@ -6,7 +6,6 @@ using namespace okapi;
 
 //controller stuff
 Controller masterController;
-
 ControllerDigital rampUp=ControllerDigital::L1;
 ControllerDigital rampDown=ControllerDigital::L2;
 
@@ -19,14 +18,16 @@ auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green
 );
-<<<<<<< Updated upstream
-
-MotorGroup ramp={11,-12};
-=======
 MotorGroup ramp={1,-5};
->>>>>>> Stashed changes
 
 MotorGroup take={14,-15};
+
+//auton stuff
+auto auton = AsyncControllerFactory::motionProfile(
+  10,
+  2,
+  1,
+  drive);
 
 
 //other variables
@@ -39,6 +40,9 @@ bool checking=false;
 bool Dinput(ControllerDigital ibutton){
  return masterController.getDigital(ibutton);
 }
+
+
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -53,6 +57,7 @@ void on_center_button() {
 	} else {
 		pros::lcd::clear_line(2);
 	}
+
 }
 
 
@@ -73,14 +78,11 @@ void initialize() {
 
 	RightDrive.tarePosition();
 	RightDrive.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
-<<<<<<< Updated upstream
-=======
 
   take.tarePosition();
   take.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
 
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
->>>>>>> Stashed changes
 }
 
 /**
@@ -113,15 +115,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-<<<<<<< Updated upstream
-  QLength base=inch;
-  QAngle Degree=degree;
-drive.moveDistance(base*5);
-drive.turnAngle(Degree*90);
-drive.moveDistance(base*5);
-=======
 
->>>>>>> Stashed changes
 }
 
 /**
