@@ -27,7 +27,8 @@ auto auton = AsyncControllerFactory::motionProfile(
   10,
   2,
   1,
-  drive);
+  drive
+);
 
 
 //other variables
@@ -83,6 +84,7 @@ void initialize() {
   take.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
 
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+  //auton stuff
 }
 
 /**
@@ -115,7 +117,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-  auton.generatePath({{10_in,0_in,0_deg}}, "red_a_1");
+  auton.generatePath( {{10_in,0_in,0_deg}}, "red_a_1");
   auton.setTarget("red_a_1");
   auton.setTarget("red_a_1",true);
 }
@@ -149,6 +151,7 @@ void opcontrol() {
       pros::delay(1000);
       if(Dinput(ControllerDigital::B)){
         autonomous();
+        pros::lcd::print(1,"Autonomous");
       }
     }
 		//driving
