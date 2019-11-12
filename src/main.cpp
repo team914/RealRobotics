@@ -12,15 +12,15 @@ ControllerDigital rampDown=ControllerDigital::L2;
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
 //motor stuff
-MotorGroup LeftDrive={4,-15};
-MotorGroup RightDrive={19,-20};
+MotorGroup LeftDrive={3,-11};
+MotorGroup RightDrive={9,-10};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green
 );
-MotorGroup ramp={11,-12};
+MotorGroup ramp={1,-5};
 
-MotorGroup take={1,-3};
+MotorGroup take={14,-15};
 
 //auton stuff
 auto auton = AsyncControllerFactory::motionProfile(
@@ -82,11 +82,7 @@ void initialize() {
   take.tarePosition();
   take.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
 
-  ramp.tarePosition();
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
-  //paths
-  auton.generatePath({{12_in,12_in,90_deg}},"red_a_1");
-  auton.generatePath({{0_in,24_in,90_deg}},"red_a_2");
 }
 
 /**
@@ -120,11 +116,6 @@ void competition_initialize() {}
  */
 void autonomous() {
 
-    take.moveRelative(0.5,1);
-    auton.setTarget("red_a_1");
-    take.moveRelative(0.5,1);
-    auton.setTarget("red_a_2",true);
-    take.moveRelative(0.5,1);
 }
 
 /**
@@ -150,7 +141,7 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.5.2");
+   	pros::lcd::print(0,"Drive 0.6.0");
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
