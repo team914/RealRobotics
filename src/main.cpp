@@ -143,7 +143,7 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.6.0");
+   	pros::lcd::print(0,"Drive 0.7.0");
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
