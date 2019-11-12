@@ -118,7 +118,8 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
- 	pros::lcd::print(0,"autonomous running");
+
+
   auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
   auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
   auton.setTarget("red_a_1",true);
