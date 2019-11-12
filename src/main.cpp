@@ -18,9 +18,9 @@ auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green
 );
-MotorGroup ramp={1,-5};
+MotorGroup ramp({1,-5});
 
-MotorGroup take={14,-15};
+MotorGroup take({14,-15});
 
 //auton stuff
 auto auton = AsyncControllerFactory::motionProfile(
@@ -117,10 +117,13 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-  auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
+  auton.generatePath({Point{-10_in,0_in,0_deg}}, "red_a_1");
   auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
-  auton.setTarget("red_a_1",false);
-  auton.setTarget("red_a_2",true);
+  auton.setTarget("red_a_1",true);
+  auton.waitUntilSettled();
+  auton.setTarget("red_a_2",false);
+  auton.waitUntilSettled();
+
 }
 
 /**
