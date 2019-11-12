@@ -117,7 +117,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-  auton.generatePath( {{10_in,0_in,0_deg}}, "red_a_1");
+  auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
   auton.setTarget("red_a_1");
   auton.setTarget("red_a_1",true);
 }
