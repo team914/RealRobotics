@@ -11,13 +11,15 @@ ControllerDigital rampDown=ControllerDigital::L2;
 
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
+//Scale for auton
+ChassisScales Scales= {3_in,9.25_in};
 //motor stuff
 MotorGroup LeftDrive={-3,11};
 MotorGroup RightDrive={-9,10};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green,
- {3_in,9.25_in}
+ Scales
 );
 MotorGroup ramp({1,-5});
 
@@ -121,7 +123,7 @@ void competition_initialize() {}
 void autonomous() {
 
 
-  auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
+  auton.generatePath({Point{-10_in,0_in,0_deg}}, "red_a_1");
   auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
   auton.setTarget("red_a_1",true);
   auton.waitUntilSettled();
@@ -153,7 +155,7 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.7.4 Dev");
+   	pros::lcd::print(0,"Drive 0.7.5 Dev");
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
