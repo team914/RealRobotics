@@ -16,7 +16,8 @@ MotorGroup LeftDrive={-3,11};
 MotorGroup RightDrive={-9,10};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
- AbstractMotor::gearset::green
+ AbstractMotor::gearset::green,
+ {3_in,9.25_in}
 );
 MotorGroup ramp({1,-5});
 
