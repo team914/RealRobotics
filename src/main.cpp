@@ -27,9 +27,9 @@ MotorGroup take({14,-15});
 
 //auton stuff
 auto auton = AsyncControllerFactory::motionProfile(
+  10,
   5,
-  3,
-  1.5,
+  2.5,
   drive
 );
 
