@@ -274,7 +274,7 @@
         },
         "upload_options": {
             "compress_bin": true,
-            "description": "Drive 0.7.5 Dev: adds auton again",
+            "description": "Drive 0.7.6 Dev: adds auton again",
             "remote_name": "robot",
             "slot": 2
         }
