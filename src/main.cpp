@@ -90,7 +90,8 @@ void initialize() {
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   ramp.setGearing(AbstractMotor::gearset::red);
   //auton stuff
-
+  auton.generatePath({Point{-10_in,0_in,0_deg}}, "red_a_1");
+  auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
 }
 
 /**
@@ -124,9 +125,7 @@ void competition_initialize() {}
  */
 void autonomous() {
 
-
-  auton.generatePath({Point{-10_in,0_in,0_deg}}, "red_a_1");
-  auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
+//pathfinder version 1
   auton.setTarget("red_a_1",true);
   auton.waitUntilSettled();
   auton.setTarget("red_a_2",false);
