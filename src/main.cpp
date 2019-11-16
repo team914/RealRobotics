@@ -90,7 +90,7 @@ void initialize() {
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   ramp.setGearing(AbstractMotor::gearset::red);
   //auton stuff
-  auton.generatePath({Point{-10_in,0_in,0_deg}}, "red_a_1");
+  auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
   auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
 }
 
