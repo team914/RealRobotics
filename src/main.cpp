@@ -21,9 +21,9 @@ auto drive = ChassisControllerFactory::create(
  AbstractMotor::gearset::green,
  Scales
 );
-MotorGroup ramp({1,-5});
+MotorGroup ramp={1,-5};
 
-MotorGroup take({13,-15});
+MotorGroup take={13,-15};
 
 //auton stuff
 auto auton = AsyncControllerFactory::motionProfile(
