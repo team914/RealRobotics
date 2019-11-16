@@ -81,8 +81,10 @@ void initialize() {
 
   take.tarePosition();
   take.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+  take.setGearing(AbstractMotor::gearset::green);
 
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+  ramp.setGearing(AbstractMotor::gearset::red);
 }
 
 /**
@@ -134,9 +136,6 @@ void autonomous() {
 
 //vars at the top
 void opcontrol() {
-//initialization stuff
- ramp.setGearing(AbstractMotor::gearset::red);
- take.setGearing(AbstractMotor::gearset::green);
 
 	while (true) {
 
