@@ -23,7 +23,7 @@ auto drive = ChassisControllerFactory::create(
 );
 MotorGroup ramp({1,-5});
 
-MotorGroup take({14,-15});
+MotorGroup take({13,-15});
 
 //auton stuff
 auto auton = AsyncControllerFactory::motionProfile(
