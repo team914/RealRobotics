@@ -21,9 +21,9 @@ auto drive = ChassisControllerFactory::create(
  AbstractMotor::gearset::green,
  Scales
 );
-MotorGroup ramp({1,-5});
+MotorGroup ramp={1,-5};
 
-MotorGroup take({14,-15});
+MotorGroup take={13,-15};
 
 //auton stuff
 auto auton = AsyncControllerFactory::motionProfile(
@@ -90,6 +90,11 @@ void initialize() {
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   ramp.setGearing(AbstractMotor::gearset::red);
   //auton stuff
+<<<<<<< HEAD
+=======
+  auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
+  auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
+>>>>>>> 1a8c162c2aef49af82dc8e1fe9f42995e413431e
 }
 
 /**
@@ -154,7 +159,7 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.7.6 Dev");
+   	pros::lcd::print(0,"Drive 0.7.7 Dev");
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
