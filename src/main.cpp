@@ -11,23 +11,27 @@ ControllerDigital rampDown=ControllerDigital::L2;
 
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
+//Scale for auton
+ChassisScales Scales= {3_in,10.25_in};
 //motor stuff
 MotorGroup LeftDrive={-3,11};
 MotorGroup RightDrive={-9,10};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
- AbstractMotor::gearset::green
+ AbstractMotor::gearset::green,
+ Scales
 );
-MotorGroup ramp={1,-5};
+MotorGroup ramp({1,-5});
 
-MotorGroup take={13,-15};
+MotorGroup take({14,-15});
 
 //auton stuff
 auto auton = AsyncControllerFactory::motionProfile(
-  10,
-  2,
-  1,
-  drive);
+  0.762,
+  2.0,
+  10.0,
+  drive
+);
 
 
 //other variables
