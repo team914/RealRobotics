@@ -147,7 +147,7 @@ void opcontrol() {
    	pros::lcd::print(0,"Drive 0.6.0");
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
-						 masterController.getAnalog(ControllerAnalog::rightX));
+						 masterController.getAnalog(ControllerAnalog::leftX));
 	  //moving the ramp
 		if(Dinput(rampUp)){
 			ramp.moveVelocity(rampSpeed);
