@@ -32,7 +32,9 @@ auto auton = AsyncControllerFactory::motionProfile(
   10.0,
   drive
 );
-
+//Pid for when it's time to test PID auton
+//auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
+//int Error;
 
 //other variables
 int rampSpeed=100;
@@ -45,7 +47,17 @@ bool Dinput(ControllerDigital ibutton){
  return masterController.getDigital(ibutton);
 }
 
-
+/*uncomment when testing PID auton
+void Move(double target){
+  PID.setTarget(target);
+  Error=target;
+  while(Error!=0){
+    double output=PID.getOutput();
+    Error=PID.getError();
+    drive.arcade(output,0);
+  }
+}
+*/
 
 /**
  * A callback function for LLEMU's center button.
@@ -128,6 +140,12 @@ void autonomous() {
   auton.waitUntilSettled();
   auton.setTarget("red_a_2",false);
   auton.waitUntilSettled();
+
+  /*PID auton(for when it's time to do it
+  Move(-10)
+  drive.waitUntilSettled();
+  Move(10);
+  */
 
 }
 
