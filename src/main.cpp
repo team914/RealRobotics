@@ -34,7 +34,6 @@ auto auton = AsyncControllerFactory::motionProfile(
 );
 //Pid for when it's time to test PID auton
 //auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
-//int Error;
 
 //other variables
 int rampSpeed=100;
@@ -50,7 +49,7 @@ bool Dinput(ControllerDigital ibutton){
 /*uncomment when testing PID auton
 void Move(double target){
   PID.setTarget(target);
-  Error=target;
+  int Error=target;
   while(Error!=0){
     double output=PID.getOutput();
     Error=PID.getError();
