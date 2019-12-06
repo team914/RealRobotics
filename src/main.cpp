@@ -13,9 +13,10 @@ ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
 //Scale for auton
 ChassisScales Scales= {3_in,10.25_in};
+
 //motor stuff
 MotorGroup LeftDrive={-3,11};
-MotorGroup RightDrive={-9,10};
+MotorGroup RightDrive={-9,8};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green,
@@ -32,7 +33,19 @@ auto auton = AsyncControllerFactory::motionProfile(
   10.0,
   drive
 );
-//Pid for when it's time to test PID auton
+//pid & odom stuff for when it's time to test PID auton
+//odom(Change the values when bot is built)
+/*ADIEncoder left(0,0);
+ADIEncoder mid(0,0);
+ADIEncoder right(0,0);
+
+ThreeEncoderSkidSteerModel model=ChassisModelFactory::create(
+  RightDrive,LeftDrive,
+  left,mid,right,
+  10
+);
+*/
+//Pid
 //auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
 
 //other variables
@@ -46,15 +59,26 @@ bool Dinput(ControllerDigital ibutton){
  return masterController.getDigital(ibutton);
 }
 
-/*uncomment when testing PID auton
+/*uncomment when testing PID auton, work on the odom check
 void Move(double target){
   PID.setTarget(target);
-  int Error=target;
+  double Error=target;
+  model.resetSensors();
+  std::valarray sensorVal=model.getSensorVals();
+  double val=(sensorVal[0]+sensorVal[1]+sensorVal[2])/3;
   while(Error!=0){
+    //odom
+    sensorVal=model.getSensorVals();
+    val=std::abs((sensorVal[0]+sensorVal[1]+sensorVal[2])/3);//takes the absolute value of the average of the 3 encoders
+    //PID
     double output=PID.getOutput();
-    Error=PID.getError();
     drive.arcade(output,0);
+    Error=PID.getError();
+    if(Error!=(target-val)){
+      Error=(target-val);
+    }
   }
+  model.resetSensors();
 }
 */
 
