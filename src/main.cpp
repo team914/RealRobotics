@@ -15,7 +15,7 @@ ControllerDigital TakeOut=ControllerDigital::R2;
 ChassisScales Scales= {3_in,10.25_in};
 //motor stuff
 MotorGroup LeftDrive={-3,11};
-MotorGroup RightDrive={-9,10};
+MotorGroup RightDrive={-9,8};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green,
