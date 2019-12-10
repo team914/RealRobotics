@@ -274,7 +274,7 @@
         },
         "upload_options": {
             "compress_bin": true,
-            "description": "Drive 0.6.0: changes the ports to the correct ones",
+            "description": "Drive 0.7.7 Dev: adds auton again",
             "remote_name": "robot",
             "slot": 2
         }
