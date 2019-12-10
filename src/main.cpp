@@ -45,7 +45,7 @@ ThreeEncoderSkidSteerModel model=ChassisModelFactory::create(
   10
 );
 */
-//Pid
+//Pid(Only use a PD controller)
 //auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
 
 //other variables
@@ -65,7 +65,7 @@ void Move(double target){
   double Error=target;
   model.resetSensors();
   std::valarray sensorVal=model.getSensorVals();
-  double val=(sensorVal[0]+sensorVal[1]+sensorVal[2])/3;
+  double val=abs(sensorVal[0]+sensorVal[1]+sensorVal[2])/3;
   while(Error!=0){
     //odom
     sensorVal=model.getSensorVals();
@@ -74,8 +74,11 @@ void Move(double target){
     double output=PID.getOutput();
     drive.arcade(output,0);
     Error=PID.getError();
+
+    //Comment out the odom check when this is uncommented(until PID works so this doesn't skew it)
     if(Error!=(target-val)){
       Error=(target-val);
+      pros::lcd::print(0,"PID doesn't match auton");
     }
   }
   model.resetSensors();
