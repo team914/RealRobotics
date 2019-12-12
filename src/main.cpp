@@ -35,7 +35,7 @@ auto auton = AsyncControllerFactory::motionProfile(
 );
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
-/*ADIEncoder left(0,0);
+ADIEncoder left(0,0);
 ADIEncoder mid(0,0);
 ADIEncoder right(0,0);
 
@@ -44,10 +44,19 @@ ThreeEncoderSkidSteerModel model=ChassisModelFactory::create(
   left,mid,right,
   10
 );
-*/
-//Pid(Only use a PD controller)
+
+//Pid(Only use a PD controller), will probably delete
 //auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
 
+
+auto PIDAuton= ChassisControllerFactory::create(
+ LeftDrive,RightDrive,
+ {0.001,0.0,0.000},//<-position
+ {0,0,0},//<-keeping it straight
+ {0,0,0},//<-turning
+ AbstractMotor::gearset::green,
+ Scales
+);
 //other variables
 int rampSpeed=100;
 int takeSpeed=200;
@@ -59,31 +68,8 @@ bool Dinput(ControllerDigital ibutton){
  return masterController.getDigital(ibutton);
 }
 
-/*uncomment when testing PID auton, work on the odom check
-void Move(double target){
-  PID.setTarget(target);
-  double Error=target;
-  model.resetSensors();
-  std::valarray sensorVal=model.getSensorVals();
-  double val=abs(sensorVal[0]+sensorVal[1]+sensorVal[2])/3;
-  while(Error!=0){
-    //odom
-    sensorVal=model.getSensorVals();
-    val=std::abs((sensorVal[0]+sensorVal[1]+sensorVal[2])/3);//takes the absolute value of the average of the 3 encoders
-    //PID
-    double output=PID.getOutput();
-    drive.arcade(output,0);
-    Error=PID.getError();
 
-    //Comment out the odom check when this is uncommented(until PID works so this doesn't skew it)
-    if(Error!=(target-val)){
-      Error=(target-val);
-      pros::lcd::print(0,"PID doesn't match auton");
-    }
-  }
-  model.resetSensors();
-}
-*/
+
 
 /**
  * A callback function for LLEMU's center button.
@@ -160,18 +146,19 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
+
+  /*normal
   auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
   auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
   auton.setTarget("red_a_1",true);
   auton.waitUntilSettled();
   auton.setTarget("red_a_2",false);
   auton.waitUntilSettled();
-
-  /*PID auton(for when it's time to do it
-  Move(-10)
-  drive.waitUntilSettled();
-  Move(10);
   */
+
+  //PID auton(for when it's time to do it
+  PIDAuton.moveDistance(-10_in);
+
 
 }
 
