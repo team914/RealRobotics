@@ -12,10 +12,10 @@ ControllerDigital rampDown=ControllerDigital::L2;
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
 //Scale for auton
-ChassisScales Scales= {3_in,10.25_in};
+ChassisScales Scales= {3.25_in,9_in};
 
 //motor stuff
-MotorGroup LeftDrive={-3,11};
+MotorGroup LeftDrive={-6,4};
 MotorGroup RightDrive={-9,8};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
@@ -51,9 +51,10 @@ ThreeEncoderSkidSteerModel model=ChassisModelFactory::create(
 
 auto PIDAuton= ChassisControllerFactory::create(
  LeftDrive,RightDrive,
+ left,right,//<-encoders
  {0.001,0.0,0.000},//<-position
- {0,0,0},//<-keeping it straight
- {0,0,0},//<-turning
+ {0,0,0},//<-keeping it straight(don't use yet)
+ {0,0,0},//<-turning(don't use yet)
  AbstractMotor::gearset::green,
  Scales
 );
