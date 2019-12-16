@@ -15,8 +15,8 @@ ControllerDigital TakeOut=ControllerDigital::R2;
 ChassisScales Scales= {3.25_in,9_in};
 
 //motor stuff
-MotorGroup LeftDrive={-6,4};
-MotorGroup RightDrive={-9,8};
+MotorGroup LeftDrive={6,-4};
+MotorGroup RightDrive={9,-8};
 auto drive = ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  AbstractMotor::gearset::green,
@@ -35,9 +35,9 @@ auto auton = AsyncControllerFactory::motionProfile(
 );
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
-ADIEncoder left(0,0);
-ADIEncoder mid(0,0);
-ADIEncoder right(0,0);
+ADIEncoder left(6,5);
+ADIEncoder mid(4,3);
+ADIEncoder right(-2,-1);
 
 ThreeEncoderSkidSteerModel model=ChassisModelFactory::create(
   RightDrive,LeftDrive,
@@ -184,7 +184,12 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.7.6 Dev");
+   	pros::lcd::print(0,"Drive 0.7.8 Dev");
+
+
+
+    pros::lcd::print(1,"Right: %f",right.get());
+    pros::lcd::print(2,"Left: %f",left.get());
 		//driving
 		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
