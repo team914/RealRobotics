@@ -21,7 +21,7 @@ auto drive = ChassisControllerFactory::create(
  AbstractMotor::gearset::green,
  Scales
 );
-MotorGroup ramp({1,-5});
+Motor ramp(1);
 
 MotorGroup take({14,-15});
 
