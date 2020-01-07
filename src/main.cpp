@@ -37,7 +37,7 @@ auto auton = AsyncControllerFactory::motionProfile(
 //odom(Change the values when bot is built)
 ADIEncoder left(6,5);
 ADIEncoder mid(4,3);
-ADIEncoder right(-2,-1);
+ADIEncoder right(1,2);
 
 ThreeEncoderSkidSteerModel model=ChassisModelFactory::create(
   RightDrive,LeftDrive,
@@ -52,7 +52,7 @@ ThreeEncoderSkidSteerModel model=ChassisModelFactory::create(
 auto PIDAuton= ChassisControllerFactory::create(
  LeftDrive,RightDrive,
  left,right,//<-encoders
- {0.001,0.0,0.000},//<-position
+ {0.005,0.0,0.000},//<-position(KU:unknown,PU:unknown)
  {0,0,0},//<-keeping it straight(don't use yet)
  {0,0,0},//<-turning(don't use yet)
  AbstractMotor::gearset::green,
@@ -88,7 +88,6 @@ void on_center_button() {
 	}
 
 }
-
 
 
 /**
@@ -158,9 +157,7 @@ void autonomous() {
   */
 
   //PID auton(for when it's time to do it
-  PIDAuton.moveDistance(-10_in);
-
-
+  PIDAuton.moveDistance(10_in);
 }
 
 /**
@@ -186,8 +183,7 @@ void opcontrol() {
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
    	pros::lcd::print(0,"Drive 0.7.8 Dev");
 
-
-
+    std::valarray<std::int32_t> odomData=PIDAuton.getSensorVals();
     pros::lcd::print(1,"Right: %f",right.get());
     pros::lcd::print(2,"Left: %f",left.get());
 		//driving
