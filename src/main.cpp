@@ -12,52 +12,41 @@ ControllerDigital rampDown=ControllerDigital::L2;
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
 //Scale for auton
-ChassisScales Scales= {3.25_in,10.25_in};
+ChassisScales Scales={{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
 MotorGroup LeftDrive={6,-4};
 MotorGroup RightDrive={9,-8};
-auto drive = ChassisControllerFactory::create(
- LeftDrive,RightDrive,
- AbstractMotor::gearset::green,
- Scales
-);
+auto drive = ChassisControllerBuilder()
+ .withMotors(LeftDrive,RightDrive)
+ .withDimensions(AbstractMotor::gearset::green,Scales)
+ .build();
+
 Motor ramp(1);
 
 MotorGroup take({14,-15});
 
-//auton stuff
-auto auton = AsyncControllerFactory::motionProfile(
-  0.762,
-  2.0,
-  10.0,
-  drive
-);
+
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
 ADIEncoder left(6,5);
 ADIEncoder mid(4,3);
 ADIEncoder right(1,2);
 
-ThreeEncoderSkidSteerModel model=ChassisModelFactory::create(
-  RightDrive,LeftDrive,
-  left,mid,right,
-  10
-);
 
 //Pid(Only use a PD controller), will probably delete
 //auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
+IterativePosPIDController::Gains pos={0.005,0.0,0.000};//<-position(KU:unknown,PU:unknown)
+IterativePosPIDController::Gains angle={0,0,0};/*<-keeping it straight(don't use yet)*/
+IterativePosPIDController::Gains turn={0,0,0};/*<-turning(don't use yet)*/
+auto PIDAuton= ChassisControllerBuilder()
+  .withMotors(LeftDrive,RightDrive)
+  .withSensors(left,right,mid) //<-encoders
+  .withDimensions(AbstractMotor::gearset::green,Scales)
+  .withGains(pos,angle,turn)
+  .build();
 
 
-auto PIDAuton= ChassisControllerFactory::create(
- LeftDrive,RightDrive,
- left,right,//<-encoders
- {0.005,0.0,0.000},//<-position(KU:unknown,PU:unknown)
- {0,0,0},//<-keeping it straight(don't use yet)
- {0,0,0},//<-turning(don't use yet)
- AbstractMotor::gearset::green,
- Scales
-);
 //other variables
 int rampSpeed=100;
 int takeSpeed=200;
@@ -157,7 +146,7 @@ void autonomous() {
   */
 
   //PID auton(for when it's time to do it
-  PIDAuton.moveDistance(10_in);
+  PIDAuton->moveDistance(10_in);
 }
 
 /**
@@ -183,11 +172,8 @@ void opcontrol() {
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
    	pros::lcd::print(0,"Drive 0.7.8 Dev");
 
-    std::valarray<std::int32_t> odomData=PIDAuton.getSensorVals();
-    pros::lcd::print(1,"Right: %f",right.get());
-    pros::lcd::print(2,"Left: %f",left.get());
 		//driving
-		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
+    drive->getModel()->arcade(masterController.getAnalog(ControllerAnalog::leftY),
 						 masterController.getAnalog(ControllerAnalog::rightX));
 	  //moving the ramp
 		if(Dinput(rampUp)){
