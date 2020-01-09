@@ -12,7 +12,7 @@ ControllerDigital rampDown=ControllerDigital::L2;
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
 //Scale for auton
-ChassisScales Scales= {3.25_in,9_in};
+ChassisScales Scales= {3.25_in,10.25_in};
 
 //motor stuff
 MotorGroup LeftDrive={6,-4};
