@@ -3,7 +3,9 @@
 
 using namespace okapi;
 
-
+//motor constants
+const int FrontLeft=6;
+const int FrontRight=9;
 //controller stuff
 Controller masterController;
 ControllerDigital rampUp=ControllerDigital::L1;
@@ -15,8 +17,8 @@ ControllerDigital TakeOut=ControllerDigital::R2;
 ChassisScales Scales={{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
-MotorGroup LeftDrive={6,-4};
-MotorGroup RightDrive={9,-8};
+MotorGroup LeftDrive={FrontLeft,-4};
+MotorGroup RightDrive={FrontRight,-8};
 auto drive = ChassisControllerBuilder()
  .withMotors(LeftDrive,RightDrive)
  .withDimensions(AbstractMotor::gearset::green,Scales)
@@ -29,21 +31,21 @@ MotorGroup take({14,-15});
 
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
-ADIEncoder left(6,5);
+IntegratedEncoder left(FrontLeft,false);
 ADIEncoder mid(4,3);
-ADIEncoder right(1,2);
+IntegratedEncoder right(FrontRight,false);
 
 
 //Pid(Only use a PD controller), will probably delete
 //auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
-IterativePosPIDController::Gains pos={0.005,0.0,0.000};//<-position(KU:unknown,PU:unknown)
-IterativePosPIDController::Gains angle={0,0,0};/*<-keeping it straight(don't use yet)*/
-IterativePosPIDController::Gains turn={0,0,0};/*<-turning(don't use yet)*/
+IterativePosPIDController::Gains pos{.002,.0000,.00003,.00};//<-position(KU:unknown,PU:unknown)
+IterativePosPIDController::Gains angle={.00/*30*/,.0000,.0000,.00};/*<-keeping it straight(don't use yet)*/
+IterativePosPIDController::Gains turn={.0035,.0000,.00015,.00};/*<-turning(don't use yet)*/
 auto PIDAuton= ChassisControllerBuilder()
   .withMotors(LeftDrive,RightDrive)
   .withSensors(left,right,mid) //<-encoders
   .withDimensions(AbstractMotor::gearset::green,Scales)
-  .withGains(pos,angle,turn)
+  .withGains(pos,turn,angle)
   .build();
 
 
