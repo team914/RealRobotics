@@ -19,10 +19,6 @@ ChassisScales Scales={{3.25_in,10.25_in},imev5GreenTPR};
 //motor stuff
 MotorGroup LeftDrive={FrontLeft,-4};
 MotorGroup RightDrive={FrontRight,-8};
-auto drive = ChassisControllerBuilder()
- .withMotors(LeftDrive,RightDrive)
- .withDimensions(AbstractMotor::gearset::green,Scales)
- .build();
 
 Motor ramp(1);
 
@@ -31,21 +27,24 @@ MotorGroup take({14,-15});
 
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
+/*
 IntegratedEncoder left(FrontLeft,false);
 ADIEncoder mid(4,3);
-IntegratedEncoder right(FrontRight,false);
+IntegratedEncoder right(FrontRight,false);*/
 
 
 //Pid(Only use a PD controller), will probably delete
 //auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
-IterativePosPIDController::Gains pos{.002,.0000,.00003,.00};//<-position(KU:unknown,PU:unknown)
-IterativePosPIDController::Gains angle={.00/*30*/,.0000,.0000,.00};/*<-keeping it straight(don't use yet)*/
-IterativePosPIDController::Gains turn={.0035,.0000,.00015,.00};/*<-turning(don't use yet)*/
-auto PIDAuton= ChassisControllerBuilder()
+//IterativePosPIDController::Gains pos{.002,.0000,.00003,.00};//<-position(KU:unknown,PU:unknown)
+//IterativePosPIDController::Gains angle={.00/*30*/,.0000,.0000,.00};/*<-keeping it straight(don't use yet)*/
+//IterativePosPIDController::Gains turn={.0035,.0000,.00015,.00};/*<-turning(don't use yet)*/
+
+auto drive= ChassisControllerBuilder()
   .withMotors(LeftDrive,RightDrive)
-  .withSensors(left,right,mid) //<-encoders
+  //.withSensors(left,right,mid) //<-encoders
   .withDimensions(AbstractMotor::gearset::green,Scales)
-  .withGains(pos,turn,angle)
+  .withClosedLoopControllerTimeUtil(25,5,250_ms)
+  //.withGains(pos,turn,angle)
   .build();
 
 
@@ -148,7 +147,7 @@ void autonomous() {
   */
 
   //PID auton(for when it's time to do it
-  PIDAuton->moveDistance(10_in);
+  drive->moveDistance(10_in);
 }
 
 /**
@@ -175,8 +174,25 @@ void opcontrol() {
    	pros::lcd::print(0,"Drive 0.7.8 Dev");
 
 		//driving
+    /*old drive
     drive->getModel()->arcade(masterController.getAnalog(ControllerAnalog::leftY),
-						 masterController.getAnalog(ControllerAnalog::rightX));
+						 masterController.getAnalog(ControllerAnalog::rightX));*/
+
+    //new drive(look at muphries one for a basis)
+    double left, right,
+    turn=masterController.getAnalog(ControllerAnalog::rightX),
+    forward=masterController.getAnalog(ControllerAnalog::leftY);
+
+    if(std::abs(forward)<=0.1){
+        left=turn;
+        right=-turn;
+    }
+    else{
+      left=forward+(0.75*turn);
+      right=forward-(0.75*turn);
+    }
+
+    drive->getModel()->tank(left,right,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
 			ramp.moveVelocity(rampSpeed);
