@@ -49,8 +49,9 @@ auto drive= ChassisControllerBuilder()
 
 
 //other variables
-int rampSpeed=40;
-int takeSpeed=200;
+const int rampSpeed=40;
+const int takeSpeed=200;
+const int driveSpeed=0.6;//<-percentage, 1=100%
 bool constantIntake=false;
 bool checking=false;
 
@@ -192,7 +193,7 @@ void opcontrol() {
       right=forward-(0.75*turn);
     }
 
-    drive->getModel()->tank(left,right,.1);
+    drive->getModel()->tank(driveSpeed*left,driveSpeed*right,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
 			ramp.moveVelocity(rampSpeed);
