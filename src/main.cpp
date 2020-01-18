@@ -17,12 +17,12 @@ ControllerDigital TakeOut=ControllerDigital::R2;
 ChassisScales Scales={{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
-MotorGroup LeftDrive={6,-4};
-MotorGroup RightDrive={9,-8};
+MotorGroup LeftDrive={11,-3};
+MotorGroup RightDrive={20,-5};
 
-Motor ramp(1);
+Motor ramp(7);
 
-MotorGroup take({14,-15});
+MotorGroup take({9,-10});
 
 
 //pid & odom stuff for when it's time to test PID auton
@@ -147,7 +147,7 @@ void autonomous() {
   */
 
   //PID auton(for when it's time to do it
-  drive->moveDistance(10_in);
+  //drive->moveDistance(10_in);
 }
 
 /**
