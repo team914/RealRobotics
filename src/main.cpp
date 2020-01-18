@@ -51,7 +51,7 @@ auto drive= ChassisControllerBuilder()
 //other variables
 const int rampSpeed=40;
 const int takeSpeed=200;
-const int driveSpeed=0.6;//<-percentage, 1=100%
+const double driveSpeed=0.6;//<-percentage, 1=100%
 bool constantIntake=false;
 bool checking=false;
 
@@ -175,14 +175,10 @@ void opcontrol() {
    	pros::lcd::print(0,"Drive 0.7.8 Dev");
 
 		//driving
-    /*old drive
-    drive->getModel()->arcade(masterController.getAnalog(ControllerAnalog::leftY),
-						 masterController.getAnalog(ControllerAnalog::rightX));*/
-
-    //new drive(look at muphries one for a basis)
     double left, right,
     turn=masterController.getAnalog(ControllerAnalog::rightX),
     forward=masterController.getAnalog(ControllerAnalog::leftY);
+
 
     if(std::abs(forward)<=0.1){
         left=turn;
@@ -191,9 +187,9 @@ void opcontrol() {
     else{
       left=forward+(0.75*turn);
       right=forward-(0.75*turn);
-    }
+}
 
-    drive->getModel()->tank(driveSpeed*left,driveSpeed*right,.1);
+    drive->getModel()->tank(left*driveSpeed,right*driveSpeed,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
 			ramp.moveVelocity(rampSpeed);
