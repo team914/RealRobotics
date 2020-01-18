@@ -49,7 +49,7 @@ auto drive= ChassisControllerBuilder()
 
 
 //other variables
-int rampSpeed=60;
+int rampSpeed=35;
 int takeSpeed=200;
 bool constantIntake=false;
 bool checking=false;
