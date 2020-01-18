@@ -8,8 +8,8 @@ using namespace okapi;
 //const int FrontRight=9;
 //controller stuff
 Controller masterController;
-ControllerDigital rampUp=ControllerDigital::L1;
-ControllerDigital rampDown=ControllerDigital::L2;
+ControllerDigital rampUp=ControllerDigital::L2;
+ControllerDigital rampDown=ControllerDigital::L1;
 
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
@@ -49,7 +49,7 @@ auto drive= ChassisControllerBuilder()
 
 
 //other variables
-int rampSpeed=35;
+int rampSpeed=40;
 int takeSpeed=200;
 bool constantIntake=false;
 bool checking=false;
