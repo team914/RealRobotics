@@ -17,8 +17,8 @@ ControllerDigital TakeOut=ControllerDigital::R2;
 ChassisScales Scales={{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
-MotorGroup LeftDrive={11,-3};
-MotorGroup RightDrive={20,-5};
+MotorGroup LeftDrive={-11,3};
+MotorGroup RightDrive={-20,-5};
 
 Motor ramp(7);
 
