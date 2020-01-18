@@ -3,7 +3,9 @@
 
 using namespace okapi;
 
-
+//motor constants(if odom is used)
+//const int FrontLeft=6;
+//const int FrontRight=9;
 //controller stuff
 Controller masterController;
 ControllerDigital rampUp=ControllerDigital::L1;
@@ -12,26 +14,38 @@ ControllerDigital rampDown=ControllerDigital::L2;
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
 //Scale for auton
-ChassisScales Scales= {3_in,9.25_in};
+ChassisScales Scales={{3.25_in,10.25_in},imev5GreenTPR};
+
 //motor stuff
-MotorGroup LeftDrive={-3,11};
-MotorGroup RightDrive={-9,10};
-auto drive = ChassisControllerFactory::create(
- LeftDrive,RightDrive,
- AbstractMotor::gearset::green,
- Scales
-);
-MotorGroup ramp={1,-5};
+MotorGroup LeftDrive={6,-4};
+MotorGroup RightDrive={9,-8};
 
-MotorGroup take={13,-15};
+Motor ramp(1);
 
-//auton stuff
-auto auton = AsyncControllerFactory::motionProfile(
-  0.762,
-  2.0,
-  10.0,
-  drive
-);
+MotorGroup take({14,-15});
+
+
+//pid & odom stuff for when it's time to test PID auton
+//odom(Change the values when bot is built)
+/*
+IntegratedEncoder left(FrontLeft,false);
+ADIEncoder mid(4,3);
+IntegratedEncoder right(FrontRight,false);*/
+
+
+//Pid(Only use a PD controller), will probably delete
+//auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
+//IterativePosPIDController::Gains pos{.002,.0000,.00003,.00};//<-position(KU:unknown,PU:unknown)
+//IterativePosPIDController::Gains angle={.00/*30*/,.0000,.0000,.00};/*<-keeping it straight(don't use yet)*/
+//IterativePosPIDController::Gains turn={.0035,.0000,.00015,.00};/*<-turning(don't use yet)*/
+
+auto drive= ChassisControllerBuilder()
+  .withMotors(LeftDrive,RightDrive)
+  //.withSensors(left,right,mid) //<-encoders
+  .withDimensions(AbstractMotor::gearset::green,Scales)
+  .withClosedLoopControllerTimeUtil(25,5,250_ms)
+  //.withGains(pos,turn,angle)
+  .build();
 
 
 //other variables
@@ -44,6 +58,7 @@ bool checking=false;
 bool Dinput(ControllerDigital ibutton){
  return masterController.getDigital(ibutton);
 }
+
 
 
 
@@ -63,7 +78,6 @@ void on_center_button() {
 	}
 
 }
-
 
 
 /**
@@ -90,8 +104,6 @@ void initialize() {
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   ramp.setGearing(AbstractMotor::gearset::red);
   //auton stuff
-  auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
-  auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
 }
 
 /**
@@ -125,12 +137,17 @@ void competition_initialize() {}
  */
 void autonomous() {
 
-//pathfinder version 1
+  /*normal
+  auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
+  auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
   auton.setTarget("red_a_1",true);
   auton.waitUntilSettled();
   auton.setTarget("red_a_2",false);
   auton.waitUntilSettled();
+  */
 
+  //PID auton(for when it's time to do it
+  drive->moveDistance(10_in);
 }
 
 /**
@@ -154,10 +171,28 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.7.7 Dev");
+   	pros::lcd::print(0,"Drive 0.7.8 Dev");
+
 		//driving
-		drive.arcade(masterController.getAnalog(ControllerAnalog::leftY),
-						 masterController.getAnalog(ControllerAnalog::rightX));
+    /*old drive
+    drive->getModel()->arcade(masterController.getAnalog(ControllerAnalog::leftY),
+						 masterController.getAnalog(ControllerAnalog::rightX));*/
+
+    //new drive(look at muphries one for a basis)
+    double left, right,
+    turn=masterController.getAnalog(ControllerAnalog::rightX),
+    forward=masterController.getAnalog(ControllerAnalog::leftY);
+
+    if(std::abs(forward)<=0.1){
+        left=turn;
+        right=-turn;
+    }
+    else{
+      left=forward+(0.75*turn);
+      right=forward-(0.75*turn);
+    }
+
+    drive->getModel()->tank(left,right,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
 			ramp.moveVelocity(rampSpeed);
@@ -183,7 +218,7 @@ void opcontrol() {
   if((Dinput(TakeIn)||constantIntake)&&!Dinput(TakeOut)){
       take.moveVelocity(takeSpeed);
   }
-  else if(Dinput(TakeOut)&&!Dinput(TakeIn)&&!constantIntake){
+  else if(Dinput(TakeOut)&&!constantIntake){
       take.moveVelocity(-takeSpeed);
   }
   else{
