@@ -137,18 +137,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-
-  /*normal
-  auton.generatePath({Point{10_in,0_in,0_deg}}, "red_a_1");
-  auton.generatePath({Point{0_in,0_in,0_deg}}, "red_a_2");
-  auton.setTarget("red_a_1",true);
-  auton.waitUntilSettled();
-  auton.setTarget("red_a_2",false);
-  auton.waitUntilSettled();
-  */
-
-  //PID auton(for when it's time to do it
-  //drive->moveDistance(10_in);
+  drive->moveDistance(10_in);
 }
 
 /**
