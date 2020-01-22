@@ -1,7 +1,9 @@
 #include "main.h"
 #include "okapi/api.hpp"
+#include "lib7842/api.hpp"
 
 using namespace okapi;
+using namespace lib7842;
 
 //motor constants(if odom is used)
 //const int FrontLeft=6;
@@ -46,7 +48,9 @@ auto drive= ChassisControllerBuilder()
   .withClosedLoopControllerTimeUtil(25,5,250_ms)
   //.withGains(pos,turn,angle)
   .build();
-
+//auton select
+std::shared_ptr<GUI::Screen> screen;
+GUI::Selector* selector;
 
 //other variables
 const int rampSpeed=40;
@@ -61,6 +65,9 @@ bool Dinput(ControllerDigital ibutton){
 }
 
 
+void auton(int mult=1){
+
+}
 
 
 /**
@@ -105,6 +112,16 @@ void initialize() {
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   ramp.setGearing(AbstractMotor::gearset::red);
   //auton stuff
+  screen = std::make_shared<GUI::Screen>( lv_scr_act(), LV_COLOR_MAKE(38,84,124) );
+	screen->startTask("screenTask");
+
+	selector = dynamic_cast<GUI::Selector*>(
+    	&screen->makePage<GUI::Selector>("Selector")
+			.button("Default", [&]() {  drive->moveDistance(10_in); })
+      .button("Red", [&]() { auton(-1); })
+      .button("Blue", [&]() { auton(); })
+      .build()
+    );
 }
 
 /**
@@ -137,7 +154,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-  drive->moveDistance(10_in);
+    selector->run();
 }
 
 /**
