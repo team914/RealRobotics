@@ -59,7 +59,7 @@ std::shared_ptr<IntegratedEncoder> rampOdom=std::make_shared<IntegratedEncoder>(
   rampOdom,
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
-  0.0007,
+  0.5,
   0.0,
   0.0,
   0.0
@@ -200,8 +200,8 @@ void opcontrol() {
 
 		//driving
     double left, right,
-    turn=masterController.getAnalog(ControllerAnalog::rightX),
-    forward=masterController.getAnalog(ControllerAnalog::leftY);
+    turn=masterController.getAnalog(ControllerAnalog::leftX),
+    forward=masterController.getAnalog(ControllerAnalog::rightY);
 
 
     if(std::abs(forward)<=0.1){
