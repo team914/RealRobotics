@@ -54,8 +54,8 @@ std::shared_ptr<GUI::Screen> screen;
 GUI::Selector* selector;
 //Tray Pid
 
-/*std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
-	std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
+std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
+/*	std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
   rampOdom,
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
@@ -63,9 +63,10 @@ GUI::Selector* selector;
   0.0,
   0.0,
   0.0
-);*/
+);
+*/
 //other variables
-const double rampSpeed(55);//<-percentage, 1=100%
+const double rampSpeed(45);//<-percentage, 1=100%
 const int takeSpeed(200);
 const double driveSpeed(0.8);//<-percentage, 1=100%
 bool constantIntake(false);
@@ -216,11 +217,23 @@ void opcontrol() {
     drive->getModel()->tank(left*driveSpeed,right*driveSpeed,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
-      //tray->setTarget(1.85);
+      /*
+      tray->setTarget(1.85);
+      tray->flipDisable(false);
+*/
 			ramp->moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
-      //tray->setTarget(0);
+      /*
+      tray->flipDisable(true);
+      while(Dinput(rampDown)){
+        ramp->moveVelocity(-100);
+        pros::delay(20);
+      }
+      ramp->moveVelocity(0);
+      tray->flipDisable(false);
+      tray->setTarget(0);
+*/
 			ramp->moveVelocity(-rampSpeed);
 		}
     else{
