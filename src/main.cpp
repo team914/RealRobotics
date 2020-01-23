@@ -8,7 +8,7 @@ using namespace lib7842;
 //motor constants(if odom is used)
 //const int FrontLeft=6;
 //const int FrontRight=9;
-const int rampPort=7;
+const int rampPort=-7;
 //controller stuff
 Controller masterController;
 ControllerDigital rampUp=ControllerDigital::X;
@@ -54,18 +54,18 @@ std::shared_ptr<GUI::Screen> screen;
 GUI::Selector* selector;
 //Tray Pid
 IntegratedEncoder rampOdom(rampPort);
-
+double rampSpeed;
 	std::shared_ptr<AsyncPosPIDController> tray = std::make_shared<AsyncPosPIDController>(
   rampOdom,
-  ramp,
+  rampSpeed,
   TimeUtilFactory::withSettledUtilParams(),
-  0.5,
+  0.0007,
   0.0,
   0.0,
   0.0
 );
 //other variables
-const int rampRate=40;
+const int rampRate=55;
 const int takeSpeed=200;
 const double driveSpeed=0.8;//<-percentage, 1=100%
 bool constantIntake=false;
@@ -78,7 +78,12 @@ bool Dinput(ControllerDigital ibutton){
 
 
 void auton(int mult=1){
-
+    take.moveVelocity(takeSpeed);
+    drive->moveDistance(24_in);
+    take.moveVelocity(0);
+    drive->moveDistance(-24_in);
+    drive->turnAngle(mult*90_deg);
+    drive->moveDistance(48_in);
 }
 
 
@@ -121,6 +126,7 @@ void initialize() {
   take.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   take.setGearing(AbstractMotor::gearset::green);
 
+  ramp.tarePosition();
   ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   ramp.setGearing(AbstractMotor::gearset::red);
   //auton stuff
@@ -210,15 +216,17 @@ void opcontrol() {
     drive->getModel()->tank(left*driveSpeed,right*driveSpeed,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
-
+      tray->setTarget(1.85);
 			//ramp.moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
+      tray->setTarget(0);
 			//ramp.moveVelocity(-rampSpeed);
 		}
-		else{
-			ramp.moveVelocity(0);
-		}
+    else{
+          ramp.moveVelocity(rampSpeed*rampRate);
+    }
+
 		pros::delay(20);
 		//intake/outtake
 		if(Dinput(TakeIn)||Dinput(TakeOut)){
