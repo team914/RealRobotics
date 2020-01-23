@@ -23,7 +23,7 @@ ChassisScales Scales={{3.25_in,10.25_in},imev5GreenTPR};
 MotorGroup LeftDrive={-11,3};
 MotorGroup RightDrive={-20,-5};
 
-Motor ramp(rampPort);
+std::shared_ptr<Motor> ramp=std::make_shared<Motor>(rampPort);
 
 MotorGroup take({9,-10});
 
@@ -53,11 +53,11 @@ auto drive= ChassisControllerBuilder()
 std::shared_ptr<GUI::Screen> screen;
 GUI::Selector* selector;
 //Tray Pid
-IntegratedEncoder rampOdom(rampPort);
-double rampSpeed;
+
+std::shared_ptr<IntegratedEncoder> rampOdom=std::make_shared<IntegratedEncoder>(rampPort);
 	std::shared_ptr<AsyncPosPIDController> tray = std::make_shared<AsyncPosPIDController>(
   rampOdom,
-  rampSpeed,
+  ramp,
   TimeUtilFactory::withSettledUtilParams(),
   0.0007,
   0.0,
@@ -65,7 +65,7 @@ double rampSpeed;
   0.0
 );
 //other variables
-const int rampRate=55;
+const double rampRate=0.55;//<-percentage, 1=100%
 const int takeSpeed=200;
 const double driveSpeed=0.8;//<-percentage, 1=100%
 bool constantIntake=false;
@@ -126,9 +126,9 @@ void initialize() {
   take.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   take.setGearing(AbstractMotor::gearset::green);
 
-  ramp.tarePosition();
-  ramp.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
-  ramp.setGearing(AbstractMotor::gearset::red);
+  ramp->tarePosition();
+  ramp->setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+  ramp->setGearing(AbstractMotor::gearset::red);
   //auton stuff
   screen = std::make_shared<GUI::Screen>( lv_scr_act(), LV_COLOR_MAKE(38,84,124) );
 	screen->startTask("screenTask");
@@ -217,14 +217,14 @@ void opcontrol() {
 	  //moving the ramp
 		if(Dinput(rampUp)){
       tray->setTarget(1.85);
-			//ramp.moveVelocity(rampSpeed);
+			//ramp->moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
       tray->setTarget(0);
-			//ramp.moveVelocity(-rampSpeed);
+			//ramp->moveVelocity(-rampSpeed);
 		}
     else{
-          ramp.moveVelocity(rampSpeed*rampRate);
+          ramp->moveVelocity(ramp->getTargetVelocity()*rampRate);
     }
 
 		pros::delay(20);
