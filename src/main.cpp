@@ -11,19 +11,19 @@ using namespace lib7842;
 const int rampPort=-7;
 //controller stuff
 Controller masterController;
-ControllerDigital rampUp=ControllerDigital::X;
-ControllerDigital rampDown=ControllerDigital::A;
+ControllerDigital rampUp(ControllerDigital::L1);
+ControllerDigital rampDown(ControllerDigital::L2);
 
-ControllerDigital TakeIn=ControllerDigital::R1;
-ControllerDigital TakeOut=ControllerDigital::R2;
+ControllerDigital TakeIn(ControllerDigital::R1);
+ControllerDigital TakeOut(ControllerDigital::R2);
 //Scale for auton
-ChassisScales Scales={{3.25_in,10.25_in},imev5GreenTPR};
+ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
-MotorGroup LeftDrive={15,3};
-MotorGroup RightDrive={-20,-5};
+MotorGroup LeftDrive{15,3};
+MotorGroup RightDrive{-20,-5};
 
-std::shared_ptr<Motor> ramp=std::make_shared<Motor>(rampPort);
+std::shared_ptr<Motor> ramp(std::make_shared<Motor>(rampPort));
 
 MotorGroup take({9,-10});
 
@@ -54,8 +54,8 @@ std::shared_ptr<GUI::Screen> screen;
 GUI::Selector* selector;
 //Tray Pid
 
-std::shared_ptr<IntegratedEncoder> rampOdom=std::make_shared<IntegratedEncoder>(rampPort);
-	std::shared_ptr<AsyncPosPIDController> tray = std::make_shared<AsyncPosPIDController>(
+/*std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
+	std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
   rampOdom,
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
@@ -63,13 +63,13 @@ std::shared_ptr<IntegratedEncoder> rampOdom=std::make_shared<IntegratedEncoder>(
   0.0,
   0.0,
   0.0
-);
+);*/
 //other variables
-const double rampRate=0.55;//<-percentage, 1=100%
-const int takeSpeed=200;
-const double driveSpeed=0.8;//<-percentage, 1=100%
-bool constantIntake=false;
-bool checking=false;
+const double rampSpeed(55);//<-percentage, 1=100%
+const int takeSpeed(200);
+const double driveSpeed(0.8);//<-percentage, 1=100%
+bool constantIntake(false);
+bool checking(false);
 
 //functions for my sanity
 bool Dinput(ControllerDigital ibutton){
@@ -200,8 +200,8 @@ void opcontrol() {
 
 		//driving
     double left, right,
-    turn=masterController.getAnalog(ControllerAnalog::leftX),
-    forward=masterController.getAnalog(ControllerAnalog::rightY);
+    turn(masterController.getAnalog(ControllerAnalog::leftX)),
+    forward(masterController.getAnalog(ControllerAnalog::rightY));
 
 
     if(std::abs(forward)<=0.1){
@@ -216,15 +216,15 @@ void opcontrol() {
     drive->getModel()->tank(left*driveSpeed,right*driveSpeed,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
-      tray->setTarget(1.85);
-			//ramp->moveVelocity(rampSpeed);
+      //tray->setTarget(1.85);
+			ramp->moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
-      tray->setTarget(0);
-			//ramp->moveVelocity(-rampSpeed);
+      //tray->setTarget(0);
+			ramp->moveVelocity(-rampSpeed);
 		}
     else{
-          ramp->moveVelocity(ramp->getTargetVelocity()*rampRate);
+      ramp->moveVelocity(0);
     }
 
 		pros::delay(20);
