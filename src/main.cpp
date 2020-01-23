@@ -8,10 +8,11 @@ using namespace lib7842;
 //motor constants(if odom is used)
 //const int FrontLeft=6;
 //const int FrontRight=9;
+const int rampPort=7;
 //controller stuff
 Controller masterController;
-ControllerDigital rampUp=ControllerDigital::L2;
-ControllerDigital rampDown=ControllerDigital::L1;
+ControllerDigital rampUp=ControllerDigital::X;
+ControllerDigital rampDown=ControllerDigital::A;
 
 ControllerDigital TakeIn=ControllerDigital::R1;
 ControllerDigital TakeOut=ControllerDigital::R2;
@@ -22,7 +23,7 @@ ChassisScales Scales={{3.25_in,10.25_in},imev5GreenTPR};
 MotorGroup LeftDrive={-11,3};
 MotorGroup RightDrive={-20,-5};
 
-Motor ramp(7);
+Motor ramp(rampPort);
 
 MotorGroup take({9,-10});
 
@@ -51,11 +52,22 @@ auto drive= ChassisControllerBuilder()
 //auton select
 std::shared_ptr<GUI::Screen> screen;
 GUI::Selector* selector;
+//Tray Pid
+IntegratedEncoder rampOdom(rampPort);
 
+	std::shared_ptr<AsyncPosPIDController> tray = std::make_shared<AsyncPosPIDController>(
+  rampOdom,
+  ramp,
+  TimeUtilFactory::withSettledUtilParams(),
+  0.5,
+  0.0,
+  0.0,
+  0.0
+);
 //other variables
-const int rampSpeed=40;
+const int rampRate=40;
 const int takeSpeed=200;
-const double driveSpeed=0.6;//<-percentage, 1=100%
+const double driveSpeed=0.8;//<-percentage, 1=100%
 bool constantIntake=false;
 bool checking=false;
 
@@ -198,10 +210,11 @@ void opcontrol() {
     drive->getModel()->tank(left*driveSpeed,right*driveSpeed,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
-			ramp.moveVelocity(rampSpeed);
+
+			//ramp.moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
-			ramp.moveVelocity(-rampSpeed);
+			//ramp.moveVelocity(-rampSpeed);
 		}
 		else{
 			ramp.moveVelocity(0);
