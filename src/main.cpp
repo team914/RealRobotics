@@ -55,7 +55,7 @@ GUI::Selector* selector;
 //Tray Pid
 
 std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
-/*	std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
+	std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
   rampOdom,
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
@@ -64,7 +64,7 @@ std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(
   0.0,
   0.0
 );
-*/
+
 //other variables
 const double rampSpeed(45);//<-percentage, 1=100%
 const int takeSpeed(200);
@@ -128,15 +128,18 @@ void initialize() {
   take.setGearing(AbstractMotor::gearset::green);
 
   ramp->tarePosition();
-  ramp->setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+  ramp->setEncoderUnits(AbstractMotor::encoderUnits::degrees);
   ramp->setGearing(AbstractMotor::gearset::red);
+  tray->startThread();
+  tray->flipDisable(false);
+
   //auton stuff
   screen = std::make_shared<GUI::Screen>( lv_scr_act(), LV_COLOR_MAKE(38,84,124) );
 	screen->startTask("screenTask");
 
 	selector = dynamic_cast<GUI::Selector*>(
     	&screen->makePage<GUI::Selector>("Selector")
-			.button("Default", [&]() {  drive->moveDistance(10_in); })
+			.button("Default", [&]() {  drive->moveDistance(24_in); })
       .button("Red", [&]() { auton(-1); })
       .button("Blue", [&]() { auton(); })
       .build()
@@ -198,7 +201,7 @@ void opcontrol() {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
    	pros::lcd::print(0,"Drive 0.7.8 Dev");
-
+    pros::lcd::print(1,"Target: %f",tray->getTarget());
 		//driving
     double left, right,
     turn(masterController.getAnalog(ControllerAnalog::leftX)),
@@ -217,14 +220,14 @@ void opcontrol() {
     drive->getModel()->tank(left*driveSpeed,right*driveSpeed,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
-      /*
-      tray->setTarget(1.85);
+
+      tray->setTarget(750);
       tray->flipDisable(false);
-*/
-			ramp->moveVelocity(rampSpeed);
+
+			//ramp->moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
-      /*
+
       tray->flipDisable(true);
       while(Dinput(rampDown)){
         ramp->moveVelocity(-100);
@@ -233,11 +236,11 @@ void opcontrol() {
       ramp->moveVelocity(0);
       tray->flipDisable(false);
       tray->setTarget(0);
-*/
-			ramp->moveVelocity(-rampSpeed);
+
+			//ramp->moveVelocity(-rampSpeed);
 		}
     else{
-      ramp->moveVelocity(0);
+      //ramp->moveVelocity(0);
     }
 
 		pros::delay(20);
