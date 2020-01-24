@@ -194,7 +194,6 @@ void autonomous() {
 //vars at the top
 void opcontrol() {
 
-
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
