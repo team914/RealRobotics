@@ -53,6 +53,7 @@ std::shared_ptr<GUI::Screen> screen;
 GUI::Selector* selector;
 //Tray Pid
 
+//use acetousk pid test for ramp stuff
 std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
 std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
   rampOdom,

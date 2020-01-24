@@ -289,7 +289,7 @@
             "compress_bin": true,
             "description": "Drive 0.8 Dev: tray PID",
             "remote_name": "robot",
-            "slot": 2
+            "slot": 1
         }
     }
 }
