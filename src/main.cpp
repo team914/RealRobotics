@@ -27,7 +27,6 @@ std::shared_ptr<Motor> ramp(std::make_shared<Motor>(rampPort));
 
 MotorGroup take({9,-10});
 
-
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
 /*
@@ -55,11 +54,11 @@ GUI::Selector* selector;
 //Tray Pid
 
 std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
-	std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
+std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
   rampOdom,
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
-  0.5,
+  0.0001,
   0.0,
   0.0,
   0.0
@@ -128,7 +127,6 @@ void initialize() {
   take.setGearing(AbstractMotor::gearset::green);
 
   ramp->tarePosition();
-  ramp->setEncoderUnits(AbstractMotor::encoderUnits::degrees);
   ramp->setGearing(AbstractMotor::gearset::red);
   tray->startThread();
   tray->flipDisable(false);
@@ -201,7 +199,12 @@ void opcontrol() {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
    	pros::lcd::print(0,"Drive 0.7.8 Dev");
-    pros::lcd::print(1,"Target: %f",tray->getTarget());
+    if(tray->getTarget()==750){
+      masterController.setText(1,1,"Moving up");
+    }
+    if(tray->getTarget()==0){
+      masterController.setText(1,1,"Moving down");
+    }
 		//driving
     double left, right,
     turn(masterController.getAnalog(ControllerAnalog::leftX)),
@@ -236,6 +239,7 @@ void opcontrol() {
       ramp->moveVelocity(0);
       tray->flipDisable(false);
       tray->setTarget(0);
+
 
 			//ramp->moveVelocity(-rampSpeed);
 		}
