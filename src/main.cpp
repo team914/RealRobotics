@@ -223,14 +223,14 @@ void opcontrol() {
 	  //moving the ramp
 		if(Dinput(rampUp)){
 
-      tray->setTarget(750);
-      tray->flipDisable(false);
+      //tray->setTarget(750);
+      //tray->flipDisable(false);
 
-			//ramp->moveVelocity(rampSpeed);
+			ramp->moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
 
-      tray->flipDisable(true);
+      /*tray->flipDisable(true);
       while(Dinput(rampDown)){
         ramp->moveVelocity(-100);
         pros::delay(20);
@@ -238,12 +238,12 @@ void opcontrol() {
       ramp->moveVelocity(0);
       tray->flipDisable(false);
       tray->setTarget(0);
+      */
 
-
-			//ramp->moveVelocity(-rampSpeed);
+			ramp->moveVelocity(-rampSpeed);
 		}
     else{
-      //ramp->moveVelocity(0);
+      ramp->moveVelocity(0);
     }
 
 		pros::delay(20);
