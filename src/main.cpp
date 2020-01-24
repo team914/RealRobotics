@@ -58,7 +58,7 @@ std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDControll
   rampOdom,
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
-  0.0001,
+  0.001,
   0.0,
   0.0,
   0.0
