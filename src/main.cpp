@@ -66,7 +66,7 @@ std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(
 );
 */
 //other variables
-const double rampSpeed(35);//<-percentage, 1=100%
+const double rampSpeed(37);//<-percentage, 1=100%
 const int takeSpeed(200);
 const double driveSpeed(0.8);//<-percentage, 1=100%
 bool constantIntake(false);
