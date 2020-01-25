@@ -55,7 +55,7 @@ GUI::Selector* selector;
 
 //use acetousk pid test for ramp stuff
 std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
-std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
+/*std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
   rampOdom,
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
@@ -64,9 +64,9 @@ std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDControll
   0.0,
   0.0
 );
-
+*/
 //other variables
-const double rampSpeed(45);//<-percentage, 1=100%
+const double rampSpeed(35);//<-percentage, 1=100%
 const int takeSpeed(200);
 const double driveSpeed(0.8);//<-percentage, 1=100%
 bool constantIntake(false);
@@ -129,8 +129,8 @@ void initialize() {
 
   ramp->tarePosition();
   ramp->setGearing(AbstractMotor::gearset::red);
-  tray->startThread();
-  tray->flipDisable(false);
+  //tray->startThread();
+  //tray->flipDisable(false);
 
   //auton stuff
   screen = std::make_shared<GUI::Screen>( lv_scr_act(), LV_COLOR_MAKE(38,84,124) );
@@ -199,12 +199,12 @@ void opcontrol() {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
    	pros::lcd::print(0,"Drive 0.7.8 Dev");
-    if(tray->getTarget()==750){
+  /*  if(tray->getTarget()==750){
       masterController.setText(1,1,"Moving up");
     }
     if(tray->getTarget()==0){
       masterController.setText(1,1,"Moving down");
-    }
+    }*/
 		//driving
     double left, right,
     turn(masterController.getAnalog(ControllerAnalog::leftX)),
