@@ -55,7 +55,7 @@ GUI::Selector* selector;
 
 //use acetousk pid test for ramp stuff
 std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
-/*std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
+std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
   rampOdom,
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
@@ -64,14 +64,13 @@ std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(
   0.0,
   0.0
 );
-*/
+
 //other variables
-<<<<<<< HEAD
-const double rampSpeed(45);//<-percentage, 1=100%
+
 const int rampTop=750;
-=======
+
 const double rampSpeed(37);//<-percentage, 1=100%
->>>>>>> 79badaa8b4464fc94e2455abe75efaa07fe062f8
+
 const int takeSpeed(200);
 const double driveSpeed(0.8);//<-percentage, 1=100%
 bool constantIntake(false);
