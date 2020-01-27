@@ -98,7 +98,7 @@ void auton(int mult=1){
     drive->moveDistance(12_in);//<-move half a square
     drive->waitUntilSettled();
     tray->setTarget(rampTop);
-    //ramp->moveAbsolute(rampTop, rampSpeed);
+    //ramp->moveAbsolute(rampTop, 100);
 }
 
 
