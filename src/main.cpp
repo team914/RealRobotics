@@ -23,9 +23,9 @@ ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 MotorGroup LeftDrive{15,3};
 MotorGroup RightDrive{-20,-5};
 
-std::shared_ptr<Motor> ramp(std::make_shared<Motor>(rampPort));
+std::shared_ptr<Motor> ramp{std::make_shared<Motor>(rampPort)};
 
-MotorGroup take({9,-10});
+MotorGroup take{9,-10};
 
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
@@ -67,6 +67,7 @@ std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDControll
 
 //other variables
 const double rampSpeed(45);//<-percentage, 1=100%
+const int rampTop=750;
 const int takeSpeed(200);
 const double driveSpeed(0.8);//<-percentage, 1=100%
 bool constantIntake(false);
@@ -79,12 +80,22 @@ bool Dinput(ControllerDigital ibutton){
 
 
 void auton(int mult=1){
+  //Move foward & grab cubes
+    drive->moveDistanceAsync(48_in);//<-move 2 sqaures
     take.moveVelocity(takeSpeed);
-    drive->moveDistance(24_in);
+    drive->waitUntilSettled();
     take.moveVelocity(0);
-    drive->moveDistance(-24_in);
+    //return to start
+    drive->moveDistance(-48_in);//<-move back 2 squares
+    drive->waitUntilSettled();
+    //turn
     drive->turnAngle(mult*90_deg);
-    drive->moveDistance(48_in);
+    drive->waitUntilSettled();
+    //move to scoring & stack
+    drive->moveDistance(12_in);//<-move half a square
+    drive->waitUntilSettled();
+    tray->setTarget(rampTop);
+    //ramp->moveAbsolute(rampTop, rampSpeed);
 }
 
 
@@ -224,7 +235,7 @@ void opcontrol() {
 	  //moving the ramp
 		if(Dinput(rampUp)){
 
-      //tray->setTarget(750);
+      //tray->setTarget(top);
       //tray->flipDisable(false);
 
 			ramp->moveVelocity(rampSpeed);
