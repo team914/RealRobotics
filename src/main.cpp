@@ -55,6 +55,7 @@ GUI::Selector* selector;
 
 //use acetousk pid test for ramp stuff
 std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
+/*std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
   rampOdom,
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
@@ -63,7 +64,6 @@ std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(
   0.0,
   0.0
 );
-
 */
 //other variables
 <<<<<<< HEAD
