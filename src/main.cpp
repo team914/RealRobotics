@@ -83,7 +83,7 @@ bool Dinput(ControllerDigital ibutton){
 
 void auton(int mult=1){
   //Move foward & grab cubes
-    drive->moveDistanceAsync(48_in);//<-move 2 sqaures
+    drive->moveDistanceAsync(45_in);//<-move 2 sqaures
     take.moveVelocity(takeSpeed);
     drive->waitUntilSettled();
     take.moveVelocity(0);
@@ -151,7 +151,7 @@ void initialize() {
 
 	selector = dynamic_cast<GUI::Selector*>(
     	&screen->makePage<GUI::Selector>("Selector")
-			.button("Default", [&]() {  drive->moveDistance(24_in); })
+			.button("Default", [&]() {  drive->moveDistance(12_in);/*<-move half a square(push into small zone)*/ })
       .button("Red", [&]() { auton(-1); })
       .button("Blue", [&]() { auton(); })
       .build()
