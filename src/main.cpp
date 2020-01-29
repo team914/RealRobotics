@@ -96,8 +96,8 @@ void auton(int mult=1){
     //move to scoring & stack
     drive->moveDistance(12_in);//<-move half a square
     drive->waitUntilSettled();
-    tray->setTarget(rampTop);
-    //ramp->moveAbsolute(rampTop, 100);
+    //tray->setTarget(rampTop);
+    ramp->moveAbsolute(rampTop, 100);
 }
 
 
@@ -142,16 +142,19 @@ void initialize() {
 
   ramp->tarePosition();
   ramp->setGearing(AbstractMotor::gearset::red);
-  //tray->startThread();
+  tray->startThread();
   //tray->flipDisable(false);
 
   //auton stuff
-  screen = std::make_shared<GUI::Screen>( lv_scr_act(), LV_COLOR_MAKE(38,84,124) );
+  screen = std::make_shared<GUI::Screen>( lv_scr_act(), LV_COLOR_MAKE(153, 157, 161) );
 	screen->startTask("screenTask");
 
 	selector = dynamic_cast<GUI::Selector*>(
     	&screen->makePage<GUI::Selector>("Selector")
-			.button("Default", [&]() {  drive->moveDistance(12_in);/*<-move half a square(push into small zone)*/ })
+			.button("Default", [&]() {
+         drive->moveDistance(-12_in);/*<-move half a square(push into small zone)*/
+         drive->moveDistance(12_in);/*<-move back*/
+       })
       .button("Red", [&]() { auton(-1); })
       .button("Blue", [&]() { auton(); })
       .build()
