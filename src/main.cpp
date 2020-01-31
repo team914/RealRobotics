@@ -6,9 +6,9 @@ using namespace okapi;
 using namespace lib7842;
 
 //motor constants(if odom is used)
-const int FrontLeft=15;
+const int FrontLeft=18;
 const int FrontRight=-20;
-const int rampPort=-7;
+const int rampPort=-12;
 //controller stuff
 Controller masterController;
 ControllerDigital rampUp(ControllerDigital::L1);
@@ -20,11 +20,11 @@ ControllerDigital TakeOut(ControllerDigital::R2);
 ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
-MotorGroup LeftDrive{FrontLeft,3};
-MotorGroup RightDrive{FrontRight,-5};
+MotorGroup LeftDrive{FrontLeft,13};
+MotorGroup RightDrive{FrontRight,-11};
 std::shared_ptr<Motor> ramp{std::make_shared<Motor>(rampPort)};
 
-MotorGroup take{9,-10};
+MotorGroup take{19,-14};
 
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
