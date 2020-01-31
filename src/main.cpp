@@ -20,7 +20,7 @@ ControllerDigital TakeOut(ControllerDigital::R2);
 ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
-MotorGroup LeftDrive{FrontLeft,3};
+MotorGroup LeftDrive{FrontLeft,4};
 MotorGroup RightDrive{FrontRight,-5};
 std::shared_ptr<Motor> ramp{std::make_shared<Motor>(rampPort)};
 
