@@ -56,7 +56,7 @@ std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDControll
   ramp->getEncoder(),
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
-  0.006,
+  0.004,
   0.0,
   0,
   0.0
