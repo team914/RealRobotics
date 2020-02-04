@@ -8,7 +8,7 @@ using namespace lib7842;
 //motor constants(if odom is used)
 const int FrontLeft=18;
 const int FrontRight=-20;
-const int rampPort=-12;
+const int rampPort=-13;
 //controller stuff
 Controller masterController;
 ControllerDigital rampUp(ControllerDigital::L1);
@@ -88,7 +88,7 @@ void auton(int mult=1){
     drive->waitUntilSettled();
     take.moveVelocity(0);
     //return to start
-    drive->moveDistance(-48_in);//<-move back 2 squares
+    drive->moveDistance(-45_in);//<-move back 2 squares
     drive->waitUntilSettled();
     //turn
     drive->turnAngle(mult*90_deg);
@@ -98,6 +98,7 @@ void auton(int mult=1){
     drive->waitUntilSettled();
     //tray->setTarget(rampTop);
     ramp->moveAbsolute(rampTop, 100);
+    ramp->moveAbsolute(rampTop, 0);
 }
 
 
@@ -157,6 +158,16 @@ void initialize() {
        })
       .button("Red", [&]() { auton(-1); })
       .button("Blue", [&]() { auton(); })
+      .button("Skills", [&]() {
+         auton(-1);/*<-runs auton for red side*/
+         drive->moveDistance(-60_in);//move half a square back
+         drive->turnAngle(90_deg);
+         drive->moveDistance(140_in);
+         drive->turnAngle(-90_deg);
+         drive->moveDistance(48_in);
+         drive->turnAngle(-90_deg);
+         auton();/*<runs auton for blue side*/
+       })
       .build()
     );
 }
