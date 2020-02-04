@@ -56,7 +56,7 @@ std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDControll
   ramp->getEncoder(),
   ramp,
   TimeUtilFactory::withSettledUtilParams(),
-  0.01,
+  0.006,
   0.0,
   0,
   0.0
@@ -65,7 +65,7 @@ std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDControll
 
 //other variables
 
-const int rampTop=650;
+const int rampTop=680;
 const int rampBottom=-5;
 
 const int takeSpeed(200);
