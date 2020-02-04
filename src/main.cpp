@@ -8,11 +8,11 @@ using namespace lib7842;
 //motor constants(if odom is used)
 const int FrontLeft=18;
 const int FrontRight=-20;
-const int rampPort=19;
+const int rampPort=-19;
 //controller stuff
 Controller masterController;
-ControllerDigital rampUp{ControllerDigital::L1};
-ControllerDigital rampDown{ControllerDigital::L2};
+ControllerDigital rampDown{ControllerDigital::L1};
+ControllerDigital rampUp{ControllerDigital::L2};
 
 ControllerDigital TakeIn{ControllerDigital::R1};
 ControllerDigital TakeOut{ControllerDigital::R2};
@@ -22,7 +22,7 @@ ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 //motor stuff
 MotorGroup LeftDrive{FrontLeft,17};
 MotorGroup RightDrive{FrontRight,-11};
-Motor ramp{rampPort};
+std::shared_ptr<Motor> ramp=std::make_shared<Motor>(rampPort);
 MotorGroup take{13,-14};
 
 //pid & odom stuff for when it's time to test PID auton
@@ -52,22 +52,21 @@ GUI::Selector* selector;
 //Tray Pid
 
 //use acetousk pid test for ramp stuff
-std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
 std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
-  rampOdom,
-  std::make_shared<Motor>(ramp),
+  ramp->getEncoder(),
+  ramp,
   TimeUtilFactory::withSettledUtilParams(),
-  0.001,
+  0.01,
   0.0,
-  0.0,
+  0,
   0.0
 );
 
+
 //other variables
 
-const int rampTop=750;
-
-const double rampSpeed{37};//<-percentage, 1=100%
+const int rampTop=650;
+const int rampBottom=-5;
 
 const int takeSpeed(200);
 const double driveSpeed(0.8);//<-percentage, 1=100%
@@ -95,9 +94,11 @@ void auton(int mult=1){
     //move to scoring & stack
     drive->moveDistance(12_in);//<-move half a square
     drive->waitUntilSettled();
-    //tray->setTarget(rampTop);
-    ramp.moveAbsolute(rampTop, 100);
-    ramp.moveAbsolute(rampTop, 0);
+    tray->setTarget(rampTop);
+    tray->waitUntilSettled();
+    tray->setTarget(rampBottom);
+    tray->waitUntilSettled();
+
 }
 
 
@@ -140,10 +141,11 @@ void initialize() {
   take.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   take.setGearing(AbstractMotor::gearset::green);
 
-  ramp.tarePosition();
-  ramp.setGearing(AbstractMotor::gearset::red);
+  ramp->tarePosition();
+  ramp->setGearing(AbstractMotor::gearset::red);
+  ramp->setEncoderUnits(AbstractMotor::encoderUnits::degrees);
   tray->startThread();
-  //tray->flipDisable(false);
+  tray->flipDisable(false);
 
   //auton stuff
   screen = std::make_shared<GUI::Screen>( lv_scr_act(), LV_COLOR_MAKE(153, 157, 161) );
@@ -224,13 +226,7 @@ void opcontrol() {
 	while (true) {
 
 		//UPDATE VERSION EVERY TIME PROGRAM IS CHANGED SO UPLOAD ISSUES ARE KNOWN!!!
-   	pros::lcd::print(0,"Drive 0.7.8 Dev");
-  /*  if(tray->getTarget()==750){
-      masterController.setText(1,1,"Moving up");
-    }
-    if(tray->getTarget()==0){
-      masterController.setText(1,1,"Moving down");
-    }*/
+   	pros::lcd::print(0,"Drive 1.0 Dev");
 		//driving
     double left, right,
     turn(masterController.getAnalog(ControllerAnalog::leftX)),
@@ -246,30 +242,29 @@ void opcontrol() {
       right=forward-(0.75*turn);
 }
 
+
+
     drive->getModel()->tank(left*driveSpeed,right*driveSpeed,.1);
 	  //moving the ramp
 		if(Dinput(rampUp)){
-
-      //tray->setTarget(top);
-      //tray->flipDisable(false);
-			ramp.moveVelocity(rampSpeed);
+      tray->setTarget(rampTop);
+      while(Dinput(rampUp)){
+        pros::delay(20);
+      }
 		}
 		else if(Dinput(rampDown)){
 
-      /*tray->flipDisable(true);
+      tray->flipDisable(true);
+      ramp->moveVelocity(-100);
       while(Dinput(rampDown)){
-        ramp->moveVelocity(-100);
         pros::delay(20);
       }
       ramp->moveVelocity(0);
       tray->flipDisable(false);
-      tray->setTarget(0);
-      */
-			ramp.moveVelocity(-rampSpeed);
+      tray->setTarget(rampBottom
+      );
+
 		}
-    else{
-      ramp.moveVelocity(0);
-    }
 
 		pros::delay(20);
 		//intake/outtake
