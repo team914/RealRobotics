@@ -11,8 +11,8 @@ const int FrontRight=-20;
 const int rampPort=-19;
 //controller stuff
 Controller masterController;
-ControllerDigital rampDown{ControllerDigital::L1};
-ControllerDigital rampUp{ControllerDigital::L2};
+ControllerDigital rampDown{ControllerDigital::L2};
+ControllerDigital rampUp{ControllerDigital::L1};
 
 ControllerDigital TakeIn{ControllerDigital::R1};
 ControllerDigital TakeOut{ControllerDigital::R2};
