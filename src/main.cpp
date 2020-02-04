@@ -11,18 +11,19 @@ const int FrontRight=-20;
 const int rampPort=-19;
 //controller stuff
 Controller masterController;
-ControllerDigital rampUp(ControllerDigital::L1);
-ControllerDigital rampDown(ControllerDigital::L2);
+ControllerDigital rampUp{ControllerDigital::L1};
+ControllerDigital rampDown{ControllerDigital::L2};
 
-ControllerDigital TakeIn(ControllerDigital::R1);
-ControllerDigital TakeOut(ControllerDigital::R2);
+ControllerDigital TakeIn{ControllerDigital::R1};
+ControllerDigital TakeOut{ControllerDigital::R2};
 //Scale for auton
 ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
-MotorGroup LeftDrive{FrontLeft,13};
+MotorGroup LeftDrive{FrontLeft,17};
 MotorGroup RightDrive{FrontRight,-11};
 std::shared_ptr<Motor> ramp{std::make_shared<Motor>(rampPort)};
+Motor oldRamp{rampPort};
 
 MotorGroup take{13,-14};
 
@@ -254,7 +255,7 @@ void opcontrol() {
       //tray->setTarget(top);
       //tray->flipDisable(false);
 
-			ramp->moveVelocity(rampSpeed);
+			oldRamp.moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
 
@@ -268,7 +269,7 @@ void opcontrol() {
       tray->setTarget(0);
       */
 
-			ramp->moveVelocity(-rampSpeed);
+			oldRamp.moveVelocity(-rampSpeed);
 		}
     else{
       ramp->moveVelocity(0);
