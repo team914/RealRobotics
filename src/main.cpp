@@ -250,14 +250,14 @@ void opcontrol() {
 
     drive->getModel()->tank(left*driveSpeed,right*driveSpeed,.1);
 	  //moving the ramp
-		if(Dinput(rampUp)){
+		if(Dinput(ControllerDigital::L1)){
 
       //tray->setTarget(top);
       //tray->flipDisable(false);
       masterController.setText(1, 1, "Moving ramp up");
 			oldRamp.moveVelocity(rampSpeed);
 		}
-		else if(Dinput(rampDown)){
+		else if(Dinput(ControllerDigital::L2)){
 
       /*tray->flipDisable(true);
       while(Dinput(rampDown)){
@@ -268,7 +268,7 @@ void opcontrol() {
       tray->flipDisable(false);
       tray->setTarget(0);
       */
-      masterController.setText(1, 1, "Moving ramp up");
+      masterController.setText(1, 1, "Moving ramp down");
 			oldRamp.moveVelocity(-rampSpeed);
 		}
     else{
