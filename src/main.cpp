@@ -254,7 +254,7 @@ void opcontrol() {
 
       //tray->setTarget(top);
       //tray->flipDisable(false);
-
+      masterController.setText(1, 1, "Moving ramp up");
 			oldRamp.moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
@@ -268,7 +268,7 @@ void opcontrol() {
       tray->flipDisable(false);
       tray->setTarget(0);
       */
-
+      masterController.setText(1, 1, "Moving ramp up");
 			oldRamp.moveVelocity(-rampSpeed);
 		}
     else{
