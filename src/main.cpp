@@ -8,7 +8,7 @@ using namespace lib7842;
 //motor constants(if odom is used)
 const int FrontLeft=18;
 const int FrontRight=-20;
-const int rampPort=-13;
+const int rampPort=-19;
 //controller stuff
 Controller masterController;
 ControllerDigital rampUp(ControllerDigital::L1);
@@ -24,7 +24,7 @@ MotorGroup LeftDrive{FrontLeft,13};
 MotorGroup RightDrive{FrontRight,-11};
 std::shared_ptr<Motor> ramp{std::make_shared<Motor>(rampPort)};
 
-MotorGroup take{19,-14};
+MotorGroup take{13,-14};
 
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
