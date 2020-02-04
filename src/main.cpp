@@ -8,10 +8,11 @@ using namespace lib7842;
 //motor constants(if odom is used)
 const int FrontLeft=18;
 const int FrontRight=-20;
+const int rampPort=19;
 //controller stuff
 Controller masterController;
-ControllerDigital rampUp{ControllerDigital::B};
-ControllerDigital rampDown{ControllerDigital::Y};
+ControllerDigital rampUp{ControllerDigital::L1};
+ControllerDigital rampDown{ControllerDigital::L2};
 
 ControllerDigital TakeIn{ControllerDigital::R1};
 ControllerDigital TakeOut{ControllerDigital::R2};
@@ -21,8 +22,7 @@ ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 //motor stuff
 MotorGroup LeftDrive{FrontLeft,17};
 MotorGroup RightDrive{FrontRight,-11};
-std::shared_ptr<Motor> ramp{std::make_shared<Motor>(19)};
-
+Motor ramp{rampPort};
 MotorGroup take{13,-14};
 
 //pid & odom stuff for when it's time to test PID auton
@@ -52,10 +52,10 @@ GUI::Selector* selector;
 //Tray Pid
 
 //use acetousk pid test for ramp stuff
-std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(-19));
+std::shared_ptr<IntegratedEncoder> rampOdom(std::make_shared<IntegratedEncoder>(rampPort));
 std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDController>(
   rampOdom,
-  ramp,
+  std::make_shared<Motor>(ramp),
   TimeUtilFactory::withSettledUtilParams(),
   0.001,
   0.0,
@@ -96,8 +96,8 @@ void auton(int mult=1){
     drive->moveDistance(12_in);//<-move half a square
     drive->waitUntilSettled();
     //tray->setTarget(rampTop);
-    ramp->moveAbsolute(rampTop, 100);
-    ramp->moveAbsolute(rampTop, 0);
+    ramp.moveAbsolute(rampTop, 100);
+    ramp.moveAbsolute(rampTop, 0);
 }
 
 
@@ -140,8 +140,8 @@ void initialize() {
   take.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
   take.setGearing(AbstractMotor::gearset::green);
 
-  ramp->tarePosition();
-  ramp->setGearing(AbstractMotor::gearset::red);
+  ramp.tarePosition();
+  ramp.setGearing(AbstractMotor::gearset::red);
   tray->startThread();
   //tray->flipDisable(false);
 
@@ -252,7 +252,7 @@ void opcontrol() {
 
       //tray->setTarget(top);
       //tray->flipDisable(false);
-			ramp->moveVelocity(rampSpeed);
+			ramp.moveVelocity(rampSpeed);
 		}
 		else if(Dinput(rampDown)){
 
@@ -265,10 +265,10 @@ void opcontrol() {
       tray->flipDisable(false);
       tray->setTarget(0);
       */
-			ramp->moveVelocity(-rampSpeed);
+			ramp.moveVelocity(-rampSpeed);
 		}
     else{
-      ramp->moveVelocity(0);
+      ramp.moveVelocity(0);
     }
 
 		pros::delay(20);
