@@ -58,7 +58,7 @@ std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDControll
   TimeUtilFactory::withSettledUtilParams(),
   0.004,
   0.0,
-  0.00005,
+  0.0001,
   0.0
 );
 
