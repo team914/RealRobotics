@@ -65,7 +65,7 @@ std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDControll
 
 //other variables
 
-const int rampTop=705;
+const int rampTop=702;
 const int rampBottom=-5;
 
 const int takeSpeed(200);
