@@ -58,14 +58,14 @@ std::shared_ptr<AsyncPosPIDController> tray=std::make_shared<AsyncPosPIDControll
   TimeUtilFactory::withSettledUtilParams(),
   0.0035,//<-P
   0.0,//<-I
-  0.00008,//<-D
+  0.00006,//<-D
   0.0
 );
 
 
 //other variables
 
-const int rampTop=850;
+const int rampTop=870;
 const int rampBottom=0;
 
 const int takeSpeed(200);
