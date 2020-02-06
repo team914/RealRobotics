@@ -203,7 +203,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-    selector->run();
+    //selector->run();
 }
 
 /**
@@ -289,9 +289,9 @@ void opcontrol() {
   }
 
 //auton button(COMMENT OUT FOR COMPS)
-if(Dinput(ControllerDigital::A)){
-  autonomous();
-}
+/*if(Dinput(ControllerDigital::A)){
+  selector->run();
+}*/
 		pros::delay(20);
 	}
 
