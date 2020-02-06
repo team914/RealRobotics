@@ -281,7 +281,7 @@ void opcontrol() {
   if((Dinput(TakeIn)||constantIntake)&&!Dinput(TakeOut)){
       take.moveVelocity(takeSpeed);
   }
-  else if(Dinput(TakeOut)&&!constantIntake){
+  else if(Dinput(TakeOut)){
       take.moveVelocity(-takeSpeed);
   }
   else{
