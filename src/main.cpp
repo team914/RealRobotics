@@ -23,7 +23,7 @@ ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 MotorGroup LeftDrive{FrontLeft,17};
 MotorGroup RightDrive{FrontRight,-11};
 std::shared_ptr<Motor> ramp=std::make_shared<Motor>(rampPort);
-MotorGroup take{1,-14};
+MotorGroup take{13,-1};
 
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
