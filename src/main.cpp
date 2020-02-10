@@ -27,10 +27,6 @@ MotorGroup take{13,-1};
 
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
-/*
-IntegratedEncoder left(FrontLeft,false);
-ADIEncoder mid(4,3);
-IntegratedEncoder right(FrontRight,false);*/
 
 
 //Pid(Only use a PD controller), will probably delete
@@ -203,7 +199,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-    //selector->run();
+    selector->run();
 }
 
 /**
