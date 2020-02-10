@@ -29,18 +29,13 @@ MotorGroup take{13,-1};
 //odom(Change the values when bot is built)
 
 
-//Pid(Only use a PD controller), will probably delete
-//auto PID= IterativeControllerFactory::posPID(0.001, 0.0, 0.000);
-//IterativePosPIDController::Gains pos{.002,.0000,.00003,.00};//<-position(KU:unknown,PU:unknown)
-//IterativePosPIDController::Gains angle={.00/*30*/,.0000,.0000,.00};/*<-keeping it straight(don't use yet)*/
-//IterativePosPIDController::Gains turn={.0035,.0000,.00015,.00};/*<-turning(don't use yet)*/
 
 auto drive= ChassisControllerBuilder()
   .withMotors(LeftDrive,RightDrive)
   .withSensors(IntegratedEncoder(FrontLeft),IntegratedEncoder(FrontRight)) //<-encoders
   .withDimensions(AbstractMotor::gearset::green,Scales)
   .withClosedLoopControllerTimeUtil(25,5,250_ms)
-  //.withGains(pos,turn,angle)
+  .withGains({.003,0.0,.0003}, {.003,0.0,0.0003})
   .build();
 //auton select
 std::shared_ptr<GUI::Screen> screen;
