@@ -140,6 +140,7 @@ void initialize() {
   ramp->tarePosition();
   ramp->setGearing(AbstractMotor::gearset::red);
   ramp->setEncoderUnits(AbstractMotor::encoderUnits::degrees);
+
   tray->startThread();
   tray->flipDisable(false);
 
