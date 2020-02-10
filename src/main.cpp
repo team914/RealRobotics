@@ -27,10 +27,6 @@ MotorGroup take{13,-1};
 
 //pid & odom stuff for when it's time to test PID auton
 //odom(Change the values when bot is built)
-/*
-IntegratedEncoder left(FrontLeft,false);
-ADIEncoder mid(4,3);
-IntegratedEncoder right(FrontRight,false);*/
 
 
 //Pid(Only use a PD controller), will probably delete
@@ -159,16 +155,6 @@ void initialize() {
        })
       .button("Red", [&]() { auton(-1); })
       .button("Blue", [&]() { auton(); })
-      .button("Skills", [&]() {
-         auton(-1);/*<-runs auton for red side*/
-         drive->moveDistance(-60_in);//move half a square back
-         drive->turnAngle(90_deg);
-         drive->moveDistance(140_in);
-         drive->turnAngle(-90_deg);
-         drive->moveDistance(48_in);
-         drive->turnAngle(-90_deg);
-         auton();/*<runs auton for blue side*/
-       })
       .build()
     );
 }
