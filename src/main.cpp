@@ -32,10 +32,10 @@ MotorGroup take{13,-1};
 
 auto drive= ChassisControllerBuilder()
   .withMotors(LeftDrive,RightDrive)
-  .withSensors(IntegratedEncoder(FrontLeft),IntegratedEncoder(FrontRight)) //<-encoders
+  .withSensors(IntegratedEncoder(-FrontLeft),IntegratedEncoder(FrontRight)) //<-encoders
   .withDimensions(AbstractMotor::gearset::green,Scales)
   .withClosedLoopControllerTimeUtil(25,5,250_ms)
-  .withGains({.003,0.0,.0003}, {.003,0.0,0.0003})
+  //.withGains({.003,0.0,.0003}, {.003,0.0,0.0003})
   .build();
 //auton select
 std::shared_ptr<GUI::Screen> screen;
