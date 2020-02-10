@@ -155,16 +155,6 @@ void initialize() {
        })
       .button("Red", [&]() { auton(-1); })
       .button("Blue", [&]() { auton(); })
-      .button("Skills", [&]() {
-         auton(-1);/*<-runs auton for red side*/
-         drive->moveDistance(-60_in);//move half a square back
-         drive->turnAngle(90_deg);
-         drive->moveDistance(140_in);
-         drive->turnAngle(-90_deg);
-         drive->moveDistance(48_in);
-         drive->turnAngle(-90_deg);
-         auton();/*<runs auton for blue side*/
-       })
       .build()
     );
 }
@@ -199,7 +189,7 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-    selector->run();
+    //selector->run();
 }
 
 /**
