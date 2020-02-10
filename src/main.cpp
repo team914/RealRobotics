@@ -6,8 +6,8 @@ using namespace okapi;
 using namespace lib7842;
 
 //motor constants(if odom is used)
-const int FrontLeft=18;
-const int FrontRight=-20;
+const int FrontLeft=-18;
+const int FrontRight=20;
 const int rampPort=-19;
 //controller stuff
 Controller masterController;
@@ -20,8 +20,8 @@ ControllerDigital TakeOut{ControllerDigital::R2};
 ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
-MotorGroup LeftDrive{FrontLeft,17};
-MotorGroup RightDrive{FrontRight,-11};
+MotorGroup LeftDrive{FrontLeft,-17};
+MotorGroup RightDrive{FrontRight,11};
 std::shared_ptr<Motor> ramp=std::make_shared<Motor>(rampPort);
 MotorGroup take{13,-1};
 
@@ -32,7 +32,7 @@ MotorGroup take{13,-1};
 
 auto drive= ChassisControllerBuilder()
   .withMotors(LeftDrive,RightDrive)
-  .withSensors(IntegratedEncoder(-FrontLeft),IntegratedEncoder(FrontRight)) //<-encoders
+  .withSensors(IntegratedEncoder(FrontLeft),IntegratedEncoder(FrontRight)) //<-encoders
   .withDimensions(AbstractMotor::gearset::green,Scales)
   .withClosedLoopControllerTimeUtil(25,5,250_ms)
   //.withGains({.003,0.0,.0003}, {.003,0.0,0.0003})
