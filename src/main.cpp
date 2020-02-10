@@ -186,6 +186,7 @@ void competition_initialize() {}
  */
 void autonomous() {
     //selector->run();
+    drive->moveDistance(1_in);
 }
 
 /**
@@ -243,8 +244,7 @@ void opcontrol() {
       }
       ramp->moveVelocity(0);
       tray->flipDisable(false);
-      tray->setTarget(rampBottom
-      );
+      tray->setTarget(rampBottom);
 
 		}
 
@@ -271,9 +271,9 @@ void opcontrol() {
   }
 
 //auton button(COMMENT OUT FOR COMPS)
-/*if(Dinput(ControllerDigital::A)){
+if(Dinput(ControllerDigital::A)){
   selector->run();
-}*/
+}
 		pros::delay(20);
 	}
 
