@@ -212,8 +212,8 @@ void opcontrol() {
    	pros::lcd::print(0,"Drive 1.0 Dev");
 		//driving
     double left, right,
-    turn(masterController.getAnalog(ControllerAnalog::leftX)),
-    forward(masterController.getAnalog(ControllerAnalog::rightY));
+    turn(-masterController.getAnalog(ControllerAnalog::leftX)),
+    forward(-masterController.getAnalog(ControllerAnalog::rightY));
 
 
     if(std::abs(forward)<=0.1){
