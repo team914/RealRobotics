@@ -16,8 +16,6 @@ ControllerDigital rampUp{ControllerDigital::L1};
 
 ControllerDigital TakeIn{ControllerDigital::R1};
 ControllerDigital TakeOut{ControllerDigital::R2};
-//Scale for auton
-ChassisScales Scales{{3.25_in,10.25_in},imev5GreenTPR};
 
 //motor stuff
 MotorGroup LeftDrive{FrontLeft,-17};
@@ -31,11 +29,11 @@ MotorGroup take{13,-1};
 
 
 auto drive= ChassisControllerBuilder()
+  .withGains({.0001,0.0,.000}, {.003,0.0,0.0003})
   .withMotors(LeftDrive,RightDrive)
   .withSensors(LeftDrive.getEncoder(),RightDrive.getEncoder()) //<-encoders
-  .withDimensions(AbstractMotor::gearset::green,Scales)
+  .withDimensions(AbstractMotor::gearset::green,ChassisScales{{3.25_in,10.25_in},imev5GreenTPR})
   .withClosedLoopControllerTimeUtil(25,5,250_ms)
-  .withGains({.003,0.0,.0003}, {.003,0.0,0.0003})
   .build();
 //auton select
 std::shared_ptr<GUI::Screen> screen;
@@ -67,6 +65,7 @@ bool checking(false);
 //functions for my sanity
 bool Dinput(ControllerDigital ibutton){
  return masterController.getDigital(ibutton);
+
 }
 
 
