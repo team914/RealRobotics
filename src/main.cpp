@@ -35,6 +35,9 @@ auto drive= ChassisControllerBuilder()
   .withDimensions(AbstractMotor::gearset::green,ChassisScales{{3.25_in,10.25_in},imev5GreenTPR})
   .withClosedLoopControllerTimeUtil(25,5,250_ms)
   .build();
+
+
+
 //auton select
 std::shared_ptr<GUI::Screen> screen;
 GUI::Selector* selector;
@@ -138,6 +141,8 @@ void initialize() {
   tray->startThread();
   tray->flipDisable(false);
 
+  autonControl={};
+
   //auton stuff
   screen = std::make_shared<GUI::Screen>( lv_scr_act(), LV_COLOR_MAKE(153, 157, 161) );
 	screen->startTask("screenTask");
@@ -186,6 +191,7 @@ void competition_initialize() {}
 void autonomous() {
     //selector->run();
     drive->moveDistance(1_in);
+    std::cout<<drive->getGains();
 }
 
 /**
