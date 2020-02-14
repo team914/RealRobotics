@@ -141,7 +141,7 @@ void initialize() {
   tray->startThread();
   tray->flipDisable(false);
 
-  autonControl={};
+
 
   //auton stuff
   screen = std::make_shared<GUI::Screen>( lv_scr_act(), LV_COLOR_MAKE(153, 157, 161) );
