@@ -30,7 +30,7 @@ MotorGroup take{13,-1};
 
 std::shared_ptr<ChassisControllerPID> drive= ChassisControllerBuilder()
   .withMotors(LeftDrive,RightDrive)
-  .withGains({.0001,0.0,.0000}, {.003,0.0,0.0003})
+  .withGains({.0001,0.0,.00001}, {.003,0.0,0.0003})
   //.withSensors(LeftDrive.getEncoder(),RightDrive.getEncoder()) //<-encoders
   .withDimensions(AbstractMotor::gearset::green,ChassisScales{{3.25_in,10.25_in},imev5GreenTPR})
   .withOdometry()
@@ -192,7 +192,7 @@ void competition_initialize() {}
  */
 void autonomous() {
     //selector->run();
-    drive->moveDistance(5_in);
+    drive->moveDistance(1_in);
 
 }
 
