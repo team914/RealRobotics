@@ -408,7 +408,7 @@ class ChassisControllerBuilder {
    * @return A fully built OdomChassisController.
    */
   std::shared_ptr<OdomChassisController> buildOdometry();
-  std::shared_ptr<ChassisControllerPID> buildCCPID();
+
   private:
   std::shared_ptr<Logger> logger;
 
@@ -477,6 +477,7 @@ class ChassisControllerBuilder {
   std::shared_ptr<ChassisControllerIntegrated> buildCCI();
   std::shared_ptr<DefaultOdomChassisController>
   buildDOCC(std::shared_ptr<ChassisController> chassisController);
+    std::shared_ptr<ChassisControllerPID> buildCCPID();
 
   std::shared_ptr<ChassisModel> makeChassisModel();
   std::shared_ptr<SkidSteerModel> makeSkidSteerModel();
