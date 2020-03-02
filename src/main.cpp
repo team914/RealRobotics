@@ -31,7 +31,7 @@ MotorGroup take{13,-1};
 std::shared_ptr<OdomChassisController> drive= ChassisControllerBuilder()
   .withMotors(LeftDrive,RightDrive)
   .withGains({.0001,0.0,.00001}, {.003,0.0,0.0003})
-  .withSensors(LeftDrive.getEncoder(1),RightDrive.getEncoder(1)) //<-encoders
+  .withSensors(LeftDrive.getEncoder(),RightDrive.getEncoder()) //<-encoders
   .withDimensions(AbstractMotor::gearset::green,ChassisScales{{3.25_in,10.25_in},imev5GreenTPR})
   .withOdometry(StateMode::CARTESIAN)
   .buildOdometry();
@@ -128,6 +128,7 @@ void initialize() {
 	//odometer initialization
 	LeftDrive.tarePosition();
   LeftDrive.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
+  LeftDrive.setReversed(true);
 
 	RightDrive.tarePosition();
 	RightDrive.setEncoderUnits(AbstractMotor::encoderUnits::rotations);
@@ -219,7 +220,7 @@ void opcontrol() {
    	pros::lcd::print(0,"Drive 1.0 Dev");
 		//driving
     double left, right,
-    turn(-masterController.getAnalog(ControllerAnalog::leftX)),
+    turn(masterController.getAnalog(ControllerAnalog::leftX)),
     forward(-masterController.getAnalog(ControllerAnalog::rightY));
 
 
