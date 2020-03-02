@@ -193,7 +193,7 @@ void competition_initialize() {}
  */
 void autonomous() {
     //selector->run();
-    drive->driveToPoint(Point{0_in,1_in});
+    drive->driveToPoint(Point{0_in,-1_in});
 
 }
 
